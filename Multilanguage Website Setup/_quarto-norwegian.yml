@@ -1,0 +1,30 @@
+project:
+  title: Python-opplæring
+  output-dir: ./_site/no
+
+website:
+  navbar:
+    right:
+      - href: ../de/Zusammenfassung.html
+        text: Deutsch
+      - href: ../en/Zusammenfassung.html
+        text: English
+      - href: ../sv/Zusammenfassung.html
+        text: Svenska
+      - href: ../da/Zusammenfassung.html
+        text: Dansk
+      - href: ../no/Zusammenfassung.html
+        text: Norsk
+  sidebar:
+    style: "floating"
+    search: true
+    contents:
+      - section: "Kapittel 1"
+        contents:
+          - href: Testkapitel.html
+            text: "Testkapittel"
+          - href: Zusammenfassung.html
+            text: "Sammendrag"
+
+
+lang: nb

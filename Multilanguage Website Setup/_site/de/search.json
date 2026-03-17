@@ -1,0 +1,26 @@
+[
+  {
+    "objectID": "Zusammenfassung.html",
+    "href": "Zusammenfassung.html",
+    "title": "Quarto Website",
+    "section": "",
+    "text": "Quarto Website\nDies ist eine Quarto-Website.\nUm mehr über Quarto-Websites zu erfahren, besuchen Sie https://quarto.org/docs/websites.",
+    "crumbs": [
+      "Deutsch",
+      "Kapitel 1",
+      "Zusammenfassung"
+    ]
+  },
+  {
+    "objectID": "Testkapitel.html",
+    "href": "Testkapitel.html",
+    "title": "Testkapitel",
+    "section": "",
+    "text": "Testkapitel\nDies ist ein Testkapitel, mit welchem getestet werden soll, ob die Spracheneinstellung in Quarto funktioniert. Es sollte nur auf Deutsch angezeigt werden.",
+    "crumbs": [
+      "Deutsch",
+      "Kapitel 1",
+      "Testkapitel"
+    ]
+  }
+]

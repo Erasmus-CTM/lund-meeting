@@ -1,0 +1,92 @@
+---
+title: "Pyodide Quarto Minimal"
+filters:
+  - quizdown
+---
+
+This is a Quarto website to showcase the use of Quizdown in a Quarto document. It is based on the [Quizdown documentation](https://github.com/parmsam/quarto-quizdown) and the [Quarto documentation](https://quarto.org/docs/).
+
+Quizdown is a simple way to create quizzes in Quarto documents. It supports multiple choice, single choice, and ordering questions. You can also include images, Code snippets, and LaTeX formulas in your questions.
+
+## An example quiz
+
+```quizdown
+# What does the following Python code print?
+~~~python
+a = 10
+b = 2
+print(a / b)
+~~~
+- [x] 5.0
+- [ ] 5
+- [ ] 20
+- [ ] Error
+> Hint: Remember what happens with division in Python (float data type).
+
+# We have a list `numbers = [10, 20, 30, 40]`. How do you access the first element (10)?
+- [x] `numbers[0]`
+- [ ] `numbers[1]`
+- [ ] `numbers(0)`
+- [ ] `numbers.first()`
+> Hint: Python always starts counting at 0.
+
+# What happens to this list?
+~~~python
+values = [1, 2, 3]
+values[1] = 99
+print(values)
+~~~
+- [x] `[1, 99, 3]`
+- [ ] `[1, 2, 3, 99]`
+- [ ] `[99, 2, 3]`
+- [ ] Error
+> Hint: We overwrite the element at index 1 (that's the second number).
+
+# Put the code in the correct order to import SymPy and define x as a symbol.
+1. import sympy
+2. x = sympy.symbols('x')
+3. f = x**2 + 1
+> Hint: First load the library, then define the variable.
+
+# What mathematical operation is performed here: `y = x**3`?
+- [x] $x$ to the power of 3 (exponentiation)
+- [ ] $x$ times 3 (multiplication)
+- [ ] $x$ plus 3 (addition)
+- [ ] Square root of $x$
+
+# Put the lines in the correct order to define a simple function.
+1. def my_function(x):
+2.     result = x + 5
+3.     return result
+> Hint: Think about the function header (`def`), the body, and the return statement (`return`).
+
+# Which two reasons typically lead to a domain restriction (in real numbers)?
+- [x] Division by zero
+- [x] Negative number under an even root
+- [ ] Multiplication by zero
+- [ ] $x$ is negative in a parabola
+
+# What does this code print (conditional statement)?
+~~~python
+x = -5
+if x < 0:
+    print("Negative")
+else:
+    print("Positive")
+~~~
+- [x] "Negative"
+- [ ] "Positive"
+- [ ] Nothing
+- [ ] Error
+
+# How do you add an element to an existing list in Python?
+~~~python
+list = [1, 2]
+# What's missing here?
+print(list) # Should be [1, 2, 3]
+~~~
+- [x] `list.append(3)`
+- [ ] `list.add(3)`
+- [ ] `list + 3`
+- [ ] `list.insert(3)`
+```

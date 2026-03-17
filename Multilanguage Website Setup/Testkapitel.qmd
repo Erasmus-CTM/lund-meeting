@@ -1,0 +1,33 @@
+---
+format: html
+---
+
+::: {.content-visible when-profile="deutsch"}
+# Testkapitel
+Dies ist ein Testkapitel, mit welchem getestet werden soll, ob die Spracheneinstellung in Quarto funktioniert. Es sollte nur auf Deutsch angezeigt werden.
+
+:::
+
+::: {.content-visible when-profile="english"}
+# Test chapter
+This is a test chapter, which should be used to test whether the language setting in Quarto works. It should only be displayed in English.
+
+:::
+
+::: {.content-visible when-profile="swedish"}
+# Testkapitel
+Detta är ett testkapitel, som ska användas för att testa om språkinställningen i Quarto fungerar. Det bör endast visas på svenska.
+
+:::
+
+::: {.content-visible when-profile="danish"}
+# Testkapitel
+Dette er et testkapitel, som skal bruges til at teste, om sprogindstillingen i Quarto fungerer. Det bør kun vises på dansk.
+
+:::
+
+::: {.content-visible when-profile="norwegian"}
+# Testkapittel
+Dette er et testkapittel, som skal brukes til å teste om språkinnstillingen i Quarto fungerer. Det bør bare vises på norsk.
+
+:::

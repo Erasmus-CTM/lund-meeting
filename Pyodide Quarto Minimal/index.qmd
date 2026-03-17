@@ -1,0 +1,23 @@
+---
+title: "Pyodide Quarto Minimal"
+filters:
+  - pyodide
+---
+
+This is a Quarto website to showcase the use of Pyodide in a Quarto document. It is based on the [Pyodide documentation](https://pyodide.org/en/stable/usage/quickstart.html) and the [Quarto documentation](https://quarto.org/docs/).
+
+The Extension allows you to run Python code in your Quarto documents using Pyodide. You can use it to create interactive visualizations, run data analysis, or simply execute Python code.
+Here are some examples of how to use the Pyodide Extension in your Quarto documents:
+
+```{pyodide-python}
+print("Hello, World!")
+```
+
+```{pyodide-python}
+n = 5
+while n > 0:
+  print(n)
+  n = n - 1
+
+print('Blastoff!')
+```

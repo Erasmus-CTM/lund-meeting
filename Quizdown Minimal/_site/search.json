@@ -1,0 +1,16 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Pyodide Quarto Minimal",
+    "section": "",
+    "text": "This is a Quarto website to showcase the use of Quizdown in a Quarto document. It is based on the Quizdown documentation and the Quarto documentation.\nQuizdown is a simple way to create quizzes in Quarto documents. It supports multiple choice, single choice, and ordering questions. You can also include images, Code snippets, and LaTeX formulas in your questions."
+  },
+  {
+    "objectID": "index.html#an-example-quiz",
+    "href": "index.html#an-example-quiz",
+    "title": "Pyodide Quarto Minimal",
+    "section": "An example quiz",
+    "text": "An example quiz\n\n# What does the following Python code print?\n~~~python\na = 10\nb = 2\nprint(a / b)\n~~~\n- [x] 5.0\n- [ ] 5\n- [ ] 20\n- [ ] Error\n&gt; Hint: Remember what happens with division in Python (float data type).\n\n# We have a list `numbers = [10, 20, 30, 40]`. How do you access the first element (10)?\n- [x] `numbers[0]`\n- [ ] `numbers[1]`\n- [ ] `numbers(0)`\n- [ ] `numbers.first()`\n&gt; Hint: Python always starts counting at 0.\n\n# What happens to this list?\n~~~python\nvalues = [1, 2, 3]\nvalues[1] = 99\nprint(values)\n~~~\n- [x] `[1, 99, 3]`\n- [ ] `[1, 2, 3, 99]`\n- [ ] `[99, 2, 3]`\n- [ ] Error\n&gt; Hint: We overwrite the element at index 1 (that's the second number).\n\n# Put the code in the correct order to import SymPy and define x as a symbol.\n1. import sympy\n2. x = sympy.symbols('x')\n3. f = x**2 + 1\n&gt; Hint: First load the library, then define the variable.\n\n# What mathematical operation is performed here: `y = x**3`?\n- [x] $x$ to the power of 3 (exponentiation)\n- [ ] $x$ times 3 (multiplication)\n- [ ] $x$ plus 3 (addition)\n- [ ] Square root of $x$\n\n# Put the lines in the correct order to define a simple function.\n1. def my_function(x):\n2.     result = x + 5\n3.     return result\n&gt; Hint: Think about the function header (`def`), the body, and the return statement (`return`).\n\n# Which two reasons typically lead to a domain restriction (in real numbers)?\n- [x] Division by zero\n- [x] Negative number under an even root\n- [ ] Multiplication by zero\n- [ ] $x$ is negative in a parabola\n\n# What does this code print (conditional statement)?\n~~~python\nx = -5\nif x &lt; 0:\n    print(\"Negative\")\nelse:\n    print(\"Positive\")\n~~~\n- [x] \"Negative\"\n- [ ] \"Positive\"\n- [ ] Nothing\n- [ ] Error\n\n# How do you add an element to an existing list in Python?\n~~~python\nlist = [1, 2]\n# What's missing here?\nprint(list) # Should be [1, 2, 3]\n~~~\n- [x] `list.append(3)`\n- [ ] `list.add(3)`\n- [ ] `list + 3`\n- [ ] `list.insert(3)`"
+  }
+]

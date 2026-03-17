@@ -1,0 +1,26 @@
+[
+  {
+    "objectID": "Zusammenfassung.html",
+    "href": "Zusammenfassung.html",
+    "title": "Quarto-webbplats",
+    "section": "",
+    "text": "Quarto-webbplats\nDetta är en Quarto-webbplats.\nFör att lära dig mer om Quarto-webbplatser, besök https://quarto.org/docs/websites.",
+    "crumbs": [
+      "Deutsch",
+      "Kapitel 1",
+      "Sammanfattning"
+    ]
+  },
+  {
+    "objectID": "Testkapitel.html",
+    "href": "Testkapitel.html",
+    "title": "Testkapitel",
+    "section": "",
+    "text": "Testkapitel\nDetta är ett testkapitel, som ska användas för att testa om språkinställningen i Quarto fungerar. Det bör endast visas på svenska.",
+    "crumbs": [
+      "Deutsch",
+      "Kapitel 1",
+      "Testkapitel"
+    ]
+  }
+]

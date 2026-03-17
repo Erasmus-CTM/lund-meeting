@@ -1,0 +1,30 @@
+project:
+  title: Python Tutorial
+  output-dir: ./_site/en
+
+website:
+  navbar:
+    right:
+      - href: ../de/Zusammenfassung.html
+        text: Deutsch
+      - href: ../en/Zusammenfassung.html
+        text: English
+      - href: ../sv/Zusammenfassung.html
+        text: Svenska
+      - href: ../da/Zusammenfassung.html
+        text: Dansk
+      - href: ../no/Zusammenfassung.html
+        text: Norsk
+  sidebar:
+    style: "floating"
+    search: true
+    contents:
+      - section: "Chapter 1"
+        contents:
+          - href: Testkapitel.html
+            text: "Test chapter"
+          - href: Zusammenfassung.html
+            text: "Summary"
+
+
+lang: en

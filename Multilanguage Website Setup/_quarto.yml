@@ -1,0 +1,8 @@
+project:
+  type: website
+
+format: html
+
+profile: 
+  default: english
+  group: [english, deutsch, swedish, danish, norwegian]

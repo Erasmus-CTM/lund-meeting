@@ -1,0 +1,26 @@
+[
+  {
+    "objectID": "Zusammenfassung.html",
+    "href": "Zusammenfassung.html",
+    "title": "Quarto Website",
+    "section": "",
+    "text": "Quarto Website\nThis is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.",
+    "crumbs": [
+      "Deutsch",
+      "Chapter 1",
+      "Summary"
+    ]
+  },
+  {
+    "objectID": "Testkapitel.html",
+    "href": "Testkapitel.html",
+    "title": "Test chapter",
+    "section": "",
+    "text": "Test chapter\nThis is a test chapter, which should be used to test whether the language setting in Quarto works. It should only be displayed in English.",
+    "crumbs": [
+      "Deutsch",
+      "Chapter 1",
+      "Test chapter"
+    ]
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "objectID": "Zusammenfassung.html",
+    "href": "Zusammenfassung.html",
+    "title": "Quarto-websted",
+    "section": "",
+    "text": "Quarto-websted\nDette er et Quarto-websted.\nFor at lære mere om Quarto-websteder, besøg https://quarto.org/docs/websites.",
+    "crumbs": [
+      "Deutsch",
+      "Kapitel 1",
+      "Sammendrag"
+    ]
+  },
+  {
+    "objectID": "Testkapitel.html",
+    "href": "Testkapitel.html",
+    "title": "Testkapitel",
+    "section": "",
+    "text": "Testkapitel\nDette er et testkapitel, som skal bruges til at teste, om sprogindstillingen i Quarto fungerer. Det bør kun vises på dansk.",
+    "crumbs": [
+      "Deutsch",
+      "Kapitel 1",
+      "Testkapitel"
+    ]
+  }
+]

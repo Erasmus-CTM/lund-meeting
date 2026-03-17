@@ -1,0 +1,45 @@
+
+
+::: {.content-visible when-profile="deutsch"}
+# Quarto Website
+Dies ist eine Quarto-Website.
+
+Um mehr über Quarto-Websites zu erfahren, besuchen Sie <https://quarto.org/docs/websites>.
+
+:::
+
+::: {.content-visible when-profile="english"}
+# Quarto Website
+
+This is a Quarto website.
+
+To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+
+:::
+
+::: {.content-visible when-profile="swedish"}
+# Quarto-webbplats
+
+Detta är en Quarto-webbplats.
+
+För att lära dig mer om Quarto-webbplatser, besök <https://quarto.org/docs/websites>.
+
+:::
+
+::: {.content-visible when-profile="danish"}
+# Quarto-websted
+
+Dette er et Quarto-websted.
+
+For at lære mere om Quarto-websteder, besøg <https://quarto.org/docs/websites>.
+
+:::
+
+::: {.content-visible when-profile="norwegian"}
+# Quarto-nettsted
+
+Dette er et Quarto-nettsted.
+
+For å lære mer om Quarto-nettsteder, besøk <https://quarto.org/docs/websites>.
+
+:::
