@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Pyodide Quarto Minimal",
     "section": "",
-    "text": "This is a Quarto website to showcase the use of Quizdown in a Quarto document. It is based on the Quizdown documentation and the Quarto documentation.\nQuizdown is a simple way to create quizzes in Quarto documents. It supports multiple choice, single choice, and ordering questions. You can also include images, Code snippets, and LaTeX formulas in your questions."
+    "text": "This is a Quarto website to showcase the use of Quizdown in a Quarto document. It is based on the Quizdown Extension for Quarto by Parsam, which it self is based on Hugo Quiz by Bonartm.\nQuizdown is a simple way to create quizzes in Quarto documents. It supports multiple choice, single choice, and ordering questions. You can also include images, Code snippets, and LaTeX formulas in your questions."
   },
   {
     "objectID": "index.html#an-example-quiz",

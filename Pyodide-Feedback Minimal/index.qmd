@@ -1,10 +1,10 @@
 ---
-title: "Pyodide Quarto Minimal"
+title: "Pyodide-Feedback Quarto Minimal"
 filters:
   - pyodide
 ---
 
-This is a Quarto website to showcase the use of Pyodide in a Quarto document. It is based on the [Pyodide documentation](https://pyodide.org/en/stable/usage/quickstart.html) and the [Quarto documentation](https://quarto.org/docs/).
+This is a Quarto website to showcase the use of Pyodide in a Quarto document. It is based on the [Pyodide documentation](https://pyodide.org/en/stable/usage/quickstart.html) and the [Quarto Pyodide-Extension](https://github.com/coatless-quarto/pyodide). Aswell as some changes to the original code of the Pyodide Extension to allow for AI Feedback.
 
 The Extension allows you to run Python code in your Quarto documents using Pyodide. You can use it to create interactive visualizations, run data analysis, or simply execute Python code.
 Here are some examples of how to use the Pyodide Extension in your Quarto documents:

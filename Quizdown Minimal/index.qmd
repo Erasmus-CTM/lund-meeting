@@ -4,7 +4,7 @@ filters:
   - quizdown
 ---
 
-This is a Quarto website to showcase the use of Quizdown in a Quarto document. It is based on the [Quizdown documentation](https://github.com/parmsam/quarto-quizdown) and the [Quarto documentation](https://quarto.org/docs/).
+This is a Quarto website to showcase the use of Quizdown in a Quarto document. It is based on the [Quizdown Extension for Quarto](https://github.com/parmsam/quarto-quizdown) by Parsam, which it self is based on [Hugo Quiz](https://github.com/bonartm/hugo-quiz/) by Bonartm.
 
 Quizdown is a simple way to create quizzes in Quarto documents. It supports multiple choice, single choice, and ordering questions. You can also include images, Code snippets, and LaTeX formulas in your questions.
 
