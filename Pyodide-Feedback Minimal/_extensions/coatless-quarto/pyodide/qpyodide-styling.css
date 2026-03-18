@@ -1,36 +1,5 @@
-/* Container für das gesamte Layout */
-/* Gesamt-Container */
-.quarto-container {
-  display: flex; /* Flexbox für horizontale Anordnung */
-  max-width: 2100px;
-  margin: 0 auto; /* Zentrierung des Containers */
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Linke Sidebar */
-#quarto-sidebar.sidebar {
-  order: 1; /* Linke Sidebar soll als erstes erscheinen */
-  flex: 0 0 250px; /* Feste Breite */
-  box-sizing: border-box;
-}
-
-/* Hauptinhalt */
-#quarto-document-content.content {
-  order: 2; /* Hauptinhalt kommt nach der linken Sidebar */
-  flex: 1; /* Hauptinhalt nimmt den restlichen Platz ein */
-  box-sizing: border-box;
-}
-
-/* Rechte Sidebar (Margin Sidebar) */
-#quarto-margin-sidebar.sidebar {
-  order: 3; /* Rechte Sidebar soll als letztes erscheinen */
-  flex: 0 0 250px; /* Feste Breite */
-  box-sizing: border-box;
-}
-
 .monaco-editor pre {
-  background-color: unset !important; 
+  background-color: unset !important;
 }
 
 .qpyodide-editor-toolbar {
@@ -78,8 +47,10 @@
   border: 1px solid #EEEEEE;
 }
 
-
-
+.qpyodide-editor-toolbar {
+  background-color: #EEEEEE;
+  padding: 0.2rem 0.5rem;
+}
 
 .qpyodide-button {
   background-color: #EEEEEE;
@@ -159,9 +130,16 @@
   box-shadow: 2px 2px 10px #EEEEEE;
 }
 
+/* Cap output height and allow text to scroll */
+/* TODO: Is there a better way to fit contents/max it parallel to the monaco editor size? */
+.reveal div.qpyodide-output-code-area pre {
+  max-height: 400px;
+  overflow: scroll;
+}
+
 /*Set the color of the feedback-area div */
 .qpyodide-output-feedback-area {
-  background-color:darksalmon;
+  background-color: darksalmon;
   color: black;
 }
 
@@ -176,15 +154,8 @@
   padding: 10px;
 }
 
-/* Cap output height and allow text to scroll */
-/* TODO: Is there a better way to fit contents/max it parallel to the monaco editor size? */
-.reveal div.qpyodide-output-code-area pre {
-  max-height: 400px;
-  overflow: scroll;
-}
-
 .qpyodide-output-graph-area.has-content {
-  display: block; 
+  display: block;
   visibility: visible;
   border: 2px solid black;
   padding: 10px;
