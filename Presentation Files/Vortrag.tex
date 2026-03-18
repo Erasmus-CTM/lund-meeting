@@ -40,7 +40,7 @@
 
 \title{CTM Workshop for Quarto}
 \subtitle{Lund 2026}
-\author{Noah Wolfs-Gäer \& Michael Kallweit }
+\author{Noah Wolfs-Gäer \& Michael Kallweit}
 \institute{Ruhr University Bochum}
 \date{19.03.2026}
 
@@ -68,7 +68,7 @@
         \item Website: \url{https://quarto.org/}
         \item You write standard Markdown code exactly how you want it to appear.
         \item You can also embed code (Python, R, Julia, Observable, \dots).
-        \item During rendering, the file is scanned for code blocks. These are processed by the respective engine, and the output is sent back to Quarto.
+        \item During rendering, Quarto scans the file for code blocks. Each code block is processed by the appropriate engine, and the output is inserted into the document.
         \item Quarto then uses Pandoc to format the page using Bootstrap themes.
         \item Finally, it generates an HTML web page, or if you want other formats such as PDF, .docx, \dots
     \end{itemize}
@@ -228,7 +228,7 @@
     \begin{columns}[c]
         \begin{column}{0.6\textwidth}
             \begin{itemize}
-                \item To use the extension in your .qmd files, you have to add \icode{filters: - pyodide} to the YAML header.
+                \item To use the extension in your .qmd files, you need to add \icode{filters: - pyodide} to the YAML header.
                 \item Afterward, you can use \icode{\bt\bt\bt\{pyodide-python\} \dots \bt\bt\bt} to embed Python code blocks into the page.
                 \item For example: \icode{\bt\bt\bt\{pyodide-python\} print("Hello World") \bt\bt\bt} will create a code block containing \icode{print("Hello World")}, which can be edited and executed on the website.
             \end{itemize}
@@ -251,8 +251,8 @@
 
 \begin{frame}{Pyodide-Python with AI-Feedback}
     \begin{itemize}
-        \item At Ruhr-University Bochum, we modified the \textbf{Coatless-pyodide} extension to include AI feedback.
-        \item The extension works very similarly to the original but adds the ability to ask an AI for help with the code.
+        \item At Ruhr University Bochum, we modified the \textbf{coatless-pyodide} extension to include AI feedback.
+        \item The extension works the same as the original but adds the ability to ask an AI for help with the code.
         \item To use this feature, users must provide a valid \textbf{API Key} and \textbf{Base URL}.
     \end{itemize}
 \end{frame}
@@ -283,6 +283,26 @@
     \footnotesize A minimal example of a website with Quizdown can be found in this repository or directly at: \url{https://gitlab.ruhr-uni-bochum.de/ctm/lund-meeting/-/tree/main/Quizdown\%20Minimal?ref_type=heads}
 \end{frame}
 
+\section {Shinylive}
+
+\begin{frame}{Shinylive}
+    \begin{itemize}
+        \item In further enhancing the interactive experience we looked for something that would allow us to give users direct feedback on mathematical concepts.
+        \item For that we looked into Shiny, specifically the shinylive extension for Quarto: \url{https://github.com/quarto-ext/shinylive}
+        \item Shinylive is an extension that lets you embed Shiny apps into your Quarto website.
+        \item The app runs entirely in the browser (via WebAssembly), and the code can be edited live with sliders, making the consequences immediately visible.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Shinylive in Action}
+    \centering
+    \fbox{\includegraphics[width=0.7\textwidth, height=0.6\textheight, keepaspectratio]{Images/shinylive_example.png}}
+
+    \vspace{0.5cm}
+    \footnotesize A minimal example of a website using the shinylive Extension can be found in this repository or directly at: \url{https://gitlab.ruhr-uni-bochum.de/ctm/lund-meeting/-/tree/main/Shinylive\%20Minimal?ref_type=heads}
+\end{frame}
+    
+
 \section{Multilanguage Website Projects}
 
 \begin{frame}{Multilanguage Website Projects}
@@ -290,7 +310,8 @@
         \item As this is an international project, we wanted to give users the ability to switch between languages in Quarto.
         \item Currently, there is no official feature to switch languages within a specific part of the website; it only supports redirecting to a different homepage.
         \item Therefore, we wrote a small Python script that modifies the navbar to include a dropdown menu, allowing users to switch languages while staying on the same page.
-        \item There is also the small problem of \icode{quarto preview} not supporting the dropdown menu, but you can host the website locally and then everything works fine, the local hosting and previewing in the browser is also included in the python script.
+        \item Quarto's \icode{preview} command does not support the switching between languages, so you won't be able to properly preview your page using \icode{quarto preview}
+        \item Instead, run the included Python script to host the site locally and preview it in the browser.
     \end{itemize}
 \end{frame}
 
