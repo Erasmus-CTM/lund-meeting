@@ -141,6 +141,78 @@
     \end{itemize}
 \end{frame}
 
+\section{Quarto Extensions}
+
+\begin{frame}{What are Quarto Extensions?}
+    \begin{itemize}
+        \item Quarto extensions are community-contributed add-ons that enhance Quarto's functionality.
+        \item They can add new \textbf{shortcodes}, \textbf{filters}, \textbf{formats}, or \textbf{journal templates}.
+        \item Extensions are hosted on GitHub and managed directly through the Quarto CLI.
+        \item The official listing of extensions can be found at: \url{https://quarto.org/docs/extensions/}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Installing and Using Extensions}
+	\small
+    \begin{columns}[c]
+        \begin{column}[t]{0.65\textwidth}
+            \textbf{Installing an extension:}
+            \begin{itemize}
+                \item Run \icode{quarto add user/repo} in your project directory.
+                \item Example: \icode{quarto add quarto-ext/fontawesome}
+                \item The extension is stored locally in \icode{\_extensions/}.
+            \end{itemize}
+            \vspace{0.4cm}
+            \textbf{Using an extension:}
+            \begin{itemize}
+                \item \textbf{Filters:} add \icode{filters: [extension-name]} to the YAML header.
+                \item \textbf{Shortcodes:} use \icode{\{\{< shortcode >\}\}} inline in your document.
+                \item \textbf{Formats:} set \icode{format: extension-name-html} in the YAML header.
+            \end{itemize}
+        \end{column}
+        \begin{column}[t]{0.3\textwidth}
+            \begin{block}{Note}
+                Extensions are project-local. You install them once per project and commit \icode{\_extensions/} to version control so collaborators don't need to reinstall.
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Notable Quarto Extensions}
+	\small
+    \begin{columns}[t]
+        \begin{column}{0.48\textwidth}
+            \textbf{Interactive \& Code}
+            \begin{itemize}
+                \item \textbf{pyodide} — run Python in the browser (WebAssembly)
+                \item \textbf{webr} — run R in the browser (WebAssembly)
+                \item \textbf{shinylive} — embed Shiny apps without a server
+            \end{itemize}
+            \vspace{0.3cm}
+            \textbf{Learning \& Teaching}
+            \begin{itemize}
+                \item \textbf{quizdown} — multiple-choice and ordering quizzes
+                \item \textbf{countdown} — in-slide countdown timer
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \textbf{Design \& Layout}
+            \begin{itemize}
+                \item \textbf{fontawesome} — \{\{< fa icon >\}\} shortcode for icons
+                \item \textbf{lightbox} — click-to-zoom image galleries
+                \item \textbf{roughnotation} — hand-drawn style annotations
+                \item \textbf{animate} — CSS scroll animations
+            \end{itemize}
+            \vspace{0.3cm}
+            \textbf{Publishing}
+            \begin{itemize}
+                \item \textbf{academicons} — academic/research icons
+                \item Journal templates (JASA, Elsevier, \dots)
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \section{Pyodide-Python}
 
 \begin{frame}{Pyodide-Python}
