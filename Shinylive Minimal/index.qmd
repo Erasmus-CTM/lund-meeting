@@ -1,0 +1,63 @@
+---
+title: "Shinylive Minimal"
+filters:
+  - shinylive
+---
+
+## Interactive Parabola with Vertex Form
+
+Adjust the parameters of the vertex form interactively:
+
+**Vertex Form: y = a(x - b)² + c**
+
+```{shinylive-python}
+#| standalone: true
+#| viewerHeight: 600
+
+import numpy as np
+import matplotlib.pyplot as plt
+from shiny import App, render, ui
+
+app_ui = ui.page_fluid(
+    ui.h2("Parabola Explorer"),
+    ui.layout_sidebar(
+        ui.sidebar(
+            ui.input_slider("a", "Stretch Factor (a):", -3, 3, 1, step=0.1),
+            ui.input_slider("b", "X Shift (b):", -5, 5, 0, step=0.5),
+            ui.input_slider("c", "Y Shift (c):", -10, 10, 0, step=0.5),
+        ),
+        ui.output_plot("parabola_plot", fill=True),
+    ),
+)
+
+def server(input, output, session):
+    @output
+    @render.plot
+    def parabola_plot():
+        a = input.a()
+        b = input.b()
+        c = input.c()
+        
+        x = np.linspace(-10, 10, 200)
+        y = a * (x - b)**2 + c
+        
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.plot(x, y, linewidth=2.5, color="steelblue")
+        ax.plot(b, c, "ro", markersize=10, label=f"Vertex ({b:.1f}, {c:.1f})")
+        ax.axhline(y=0, color="black", linestyle="-", linewidth=0.8, alpha=0.3)
+        ax.axvline(x=0, color="black", linestyle="-", linewidth=0.8, alpha=0.3)
+        ax.grid(True, alpha=0.3)
+        ax.set_xlabel("x", fontsize=12)
+        ax.set_ylabel("y", fontsize=12)
+        ax.set_title(f"y = {a:.2f}(x - {b:.2f})^2 + {c:.2f}", fontsize=14)
+        ax.set_xlim(-10, 10)
+        ax.set_ylim(-30, 40)
+        ax.legend(fontsize=10)
+        
+        return fig
+
+app = App(app_ui, server)
+```
+
+Try the sliders and observe how the parabola changes!
+
