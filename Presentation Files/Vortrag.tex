@@ -28,19 +28,15 @@
 \usepackage{microtype}
 \usepackage{hyperref}
 
-% Code-Styling
-\usepackage{listings}
-\lstdefinestyle{quartocode}{
-    basicstyle=\ttfamily\small\color{rub-blue!90!black},
-    backgroundcolor=\color{rub-grey!70!white},
-    frame=single,
-    framerule=0pt,
-    columns=flexible,
-    keepspaces=true,
-    showstringspaces=false,
-    breaklines=true,
+% Inline-Code-Befehl mit sichtbarem grauem Hintergrund
+% \bt erzeugt einen Backtick (Gravis) in T1-Kodierung
+\newcommand{\bt}{\textasciigrave}
+\newcommand{\icode}[1]{%
+    \begingroup
+    \setlength\fboxsep{2.5pt}%
+    \colorbox{rub-grey}{\texttt{\color{rub-blue}\small\strut #1}}%
+    \endgroup
 }
-\lstset{style=quartocode}
 
 \title{CTM Workshop for Quarto}
 \subtitle{Lund 2026}
@@ -124,10 +120,10 @@
     \begin{columns}[c]
         \begin{column}{0.6\textwidth}
             \begin{itemize}
-                \item You should now have 4 files: \texttt{\_quarto.yml}, \texttt{about.qmd}, \texttt{index.qmd}, \texttt{styles.css}
-                \item These files form the foundation of a Quarto website. You can already render and preview the site (via the terminal with ``quarto render'' or the render button in the top right of any .qmd file).
-                \item The \texttt{\_quarto.yml} is the configuration file for the website; here you can adjust the core design and global settings.
-                \item Each .qmd file has a YAML header (marked by \texttt{---} at the top and bottom). Here you can override settings for that specific page.
+                \item You should now have 4 files: \icode{\_quarto.yml}, \icode{about.qmd}, \icode{index.qmd}, \icode{styles.css}
+                \item These files form the foundation of a Quarto website. You can already render and preview the site (via the terminal with \icode{quarto render} or the render button in the top right of any .qmd file).
+                \item The \icode{\_quarto.yml} is the configuration file for the website; here you can adjust the core design and global settings.
+                \item Each .qmd file has a YAML header (marked by \icode{---} at the top and bottom). Here you can override settings for that specific page.
             \end{itemize}
         \end{column}
         \begin{column}{0.4\textwidth}
@@ -136,33 +132,33 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Quarto-Syntax}
+\begin{frame}{Quarto-Syntax}
     \begin{itemize}
-        \item \lstinline|#, ##, ###| creates sections, subsections, subsubsections, etc.
-        \item \lstinline|:::{} \dots :::| creates callout blocks or tabsets, depending on the content inside \lstinline|{}|.
-        \item \lstinline|<details> </details>| creates a foldable HTML block. You can add a title using \lstinline|<summary> </summary>| inside.
-        \item \lstinline|```{} ```| creates a code block. The content of \lstinline|{}| defines the language.
+        \item \icode{\#, \#\#, \#\#\#} creates sections, subsections, subsubsections, etc.
+        \item \icode{:::\{\} \dots :::} creates callout blocks or tabsets, depending on the content inside \icode{\{\}}.
+        \item \icode{<details> </details>} creates a foldable HTML block. You can add a title using \icode{<summary> </summary>} inside.
+        \item \icode{\bt\bt\bt\{\} \bt\bt\bt} creates a code block. The content of \icode{\{\}} defines the language.
     \end{itemize}
 \end{frame}
 
 \section{Pyodide-Python}
 
-\begin{frame}[fragile]{Pyodide-Python}
+\begin{frame}{Pyodide-Python}
     \begin{itemize}
         \item Pyodide-Python is a web-based Python environment that allows you to run Python without local installation, as all computing is done in the browser.
         \item This is especially useful for giving students an easy entry into using Python for \textbf{Computational Thinking in Mathematics}.
-        \item The extension can be installed via the terminal with \texttt{quarto add coatless-quarto/pyodide}.
+        \item The extension can be installed via the terminal with \icode{quarto add coatless-quarto/pyodide}.
         \item The extension is open-source and can be found at: \url{https://github.com/coatless-quarto/pyodide}
     \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Pyodide-Python}
+\begin{frame}{Pyodide-Python}
     \begin{columns}[c]
         \begin{column}{0.6\textwidth}
             \begin{itemize}
-                \item To use the extension in your .qmd files, you have to add \texttt{filters: - pyodide} to the YAML header.
-                \item Afterward, you can use \lstinline|```{pyodide-python} \dots ```| to embed Python code blocks into the page.
-                \item For example: \lstinline|```{pyodide-python} print("Hello World") ```| will create a code block containing \texttt{print("Hello World")}, which can be edited and executed on the website.
+                \item To use the extension in your .qmd files, you have to add \icode{filters: - pyodide} to the YAML header.
+                \item Afterward, you can use \icode{\bt\bt\bt\{pyodide-python\} \dots \bt\bt\bt} to embed Python code blocks into the page.
+                \item For example: \icode{\bt\bt\bt\{pyodide-python\} print("Hello World") \bt\bt\bt} will create a code block containing \icode{print("Hello World")}, which can be edited and executed on the website.
             \end{itemize}
         \end{column}
         \begin{column}{0.3\textwidth}
@@ -171,7 +167,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Pyodide-Python in Action}
+\begin{frame}{Pyodide-Python in Action}
     \centering
     \includegraphics[width=0.7\textwidth, height=0.6\textheight, keepaspectratio]{Images/pyodide_example.png}
 
@@ -222,7 +218,7 @@
         \item As this is an international project, we wanted to give users the ability to switch between languages in Quarto.
         \item Currently, there is no official feature to switch languages within a specific part of the website; it only supports redirecting to a different homepage.
         \item Therefore, we wrote a small Python script that modifies the navbar to include a dropdown menu, allowing users to switch languages while staying on the same page.
-        \item There is also the small problem of ``quarto preview'' not supporting the dropdown menu, but you can host the website locally and then everything works fine, the local hosting and previewing in the browser is also included in the python script.
+        \item There is also the small problem of \icode{quarto preview} not supporting the dropdown menu, but you can host the website locally and then everything works fine, the local hosting and previewing in the browser is also included in the python script.
     \end{itemize}
 \end{frame}
 
