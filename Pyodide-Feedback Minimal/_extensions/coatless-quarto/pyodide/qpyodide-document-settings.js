@@ -22,7 +22,7 @@ globalThis.qpyodideCustomizedPyodideOptions = {
 // Store cell data
 globalThis.qpyodideCellDetails = {{QPYODIDECELLDETAILS}};
 
-/* Set variable for backend 
+/* Set variable for backend
 for Groq Server: "groq"
 for flask Server: "flask"*/
 globalThis.backend = "groq";
