@@ -1,0 +1,40 @@
+/* UI Component styles. */
+
+form {
+    padding: 2em;
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+    align-items: start;
+}
+
+/* buttons should feel a bit more interactive... */
+button:hover:not(:disabled) {
+    background-color: bisque;
+}
+
+/* error message */
+.error-msg {
+    max-width: 300px;
+    margin: 2em auto;
+    background-color: rgba(255, 0, 0, 0.364);
+    border-radius: 1em;
+    padding: 2em;
+}
+
+/* container */
+.small-box {
+    max-width: 400px;
+    min-height: 200px;
+    background-color: #1a1a1a4e;
+    margin: 2em auto;
+    padding: 1em;
+    border-radius: 1em;
+    font-size: large;
+}
+
+.small-title {
+    font-size: small;
+    font-style: italic;
+    opacity: 0.8;
+}

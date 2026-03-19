@@ -1,0 +1,177 @@
+\documentclass[hyperref={pdfpagelabels=false},table]{beamer}
+
+\input{lec_common}
+\date{}
+\begin{document}
+
+\part{Unit 8a: GUI using matplotlib}
+
+%\frame{\tableofcontents}
+
+
+\begin{frame}[fragile]{Widgets}
+\vfill
+Widget = windows gadget  (Engl.) is the term for a little window which serves as a user interface to
+a computer program.
+\vfill
+We use here the widget module of Matplotlib
+\begin{python}
+ import matplotlib.widgets as mpw
+\end{python}
+This lecture explains the basic by a couple of guiding examples. Make sure you choose
+in Spyder the graphic mode "Automatic".
+\end{frame}
+
+\begin{frame}[fragile]{Widgets and Events}
+There are different use scenarios:
+\begin{enumerate}
+\item Using matplotlib.widgets we will make sliders and buttons in a widget.
+\item In any plot (without using widgets) you can handle mouse events such as "mouse
+pressed". We will make such an example.
+\end{enumerate}
+\end{frame}
+\begin{frame}[fragile]{Creating a Widget}
+In the last plot we created a figure object and an axes object in one step by the \pyth!subplots!-command.
+Now we create them separately,
+\begin{enumerate}
+\item Make a figure object \pyth!fig = figure()!
+\item Make an axes object within the figure \pyth!ax = axes(...)!
+\item Create a widget, e.g. a slider,  by using this axes object \pyth!sld = Slider(ax, ...)!
+\item Define a \emph{callback function}  that processes the data obtained from the widget.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Axes dimensions - the size of the widget}
+The signature of the \pyth!axes!-command:
+\begin{python}
+ax = axes([left, bottom, width, height])
+\end{python}
+\vfill
+\includegraphics[height=0.6\textheight]{axesRectangle.png}
+\end{frame}
+\begin{frame}[fragile]{Turning a Rectangle into a Sliderobject}
+ \begin{python}
+sld = Slider(ax, 'amp', 0., 5.,
+             valinit=1, valfmt="%1.1f")
+\end{python}
+The value choosen by the slider is available through \pyth!sld.val!
+\end{frame}
+\begin{frame}[fragile]{Putting things together}
+ \begin{python}
+from matplotlib.widgets import Slider
+fig = figure()
+sld_ax = axes([0.2, 0.9, 0.6, 0.05])
+plt_ax = axes([0.1, 0.15, 0.8, 0.7])
+sld = Slider(sld_ax, 'values', 0., 5.,
+             valinit=1,  valfmt="%1.1f")
+anno=plt_ax.annotate('Here comes later a plot',
+             (0.2,0.40), fontsize=24)
+ \end{python}
+\begin{center}
+\includegraphics[height=0.5\textheight]{slider1.png}
+\end{center}
+\end{frame}
+\begin{frame}[fragile]{The callback function}
+The callback function processes the given value from the slider.
+\begin{python}
+def val_annotate(val):
+    anno.set_text(f'The given value is {val}')
+\end{python}
+Note, the call back function has only one parameter. All other information
+is passed as a global variable -- here the annotation object \pyth!anno!.\\
+The call back function is exectued on every change of the slider position by
+\begin{python}
+sld.on_changed(val_annotate)
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{The complete demonstration}
+\begin{python}
+from matplotlib.widgets import Slider
+
+fig = figure()
+sld_ax = axes([0.2, 0.9, 0.6, 0.05])
+plt_ax = axes([0.1, 0.15, 0.8, 0.7])
+val_init=1.0
+sld = Slider(sld_ax, 'values', 0., 5.,
+             valinit=val_init,  valfmt="%1.1f")
+anno=plt_ax.annotate(f'The given value is'
+          f' {val_init:1.1f}', (0.2,0.40),
+                              fontsize=24)
+def val_annotate(val):
+    anno.set_text(f'The given value is {val:1.1f}')
+sld.on_changed(val_annotate)
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{... and the result}
+\includegraphics[width=\textwidth]{slider2.png}
+\end{frame}
+\begin{frame}[fragile]{Example 2 - A dynamic plot}
+\begin{python}
+from matplotlib.pyplot import *
+from matplotlib.widgets import Slider
+fig = figure(figsize = (4,2))
+sld_ax = axes([0.2, 0.9, 0.6, 0.05]) # axes for slider
+ax = axes([0.1, 0.15, 0.8, 0.7])     # axes for the plot
+sld = Slider(sld_ax, 'amp', 0., 5.)
+x = linspace(-2*pi, 2*pi, 200)
+ax.set_ylim(-5.5, 5.5)
+lines, = ax.plot(x, sld.val*sin(x))
+
+def update_amplitude(val):
+    lines.set_ydata(val*sin(x))
+
+sld.on_changed(update_amplitude)
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{... and the result}
+\includegraphics[width=\textwidth]{slider3.png}
+\end{frame}
+\begin{frame}[fragile]{Example 3 - Two sliders}
+For the damped Lissajous curve defined by
+
+\begin{eqnarray*}
+        x(t) &= \cos(at)e^{-dt} \\
+        y(t) &= \sin(t)e^{-dt}
+\end{eqnarray*}
+with $0\leq t < 14\pi$.
+
+
+Use one slider for the angular frequency $a$ and one for the damping factor $d$.
+\end{frame}
+\begin{frame}[fragile]{Example 3 - The code}
+\begin{python}
+fig = figure()
+slda_ax = axes([0.05, 0.5, 0.3, 0.03]) # axes for a
+sldd_ax = axes([0.05, 0.4, 0.3, 0.03]) # axes for d
+ax = axes([0.5, 0.1, 0.4, 0.8])        # axes for plot
+
+t = linspace(0, 14*pi, 400)
+a0, d0 = 1., 0.05
+slda = Slider(slda_ax, 'a', 0, 2,
+              valinit=a0, valfmt="%1.2f")
+sldd = Slider(sldd_ax, 'd', 0, 0.1,
+              valinit=d0,  valfmt="%1.3f")
+
+ax.set_xlim([-1, 1])
+ax.set_ylim([-1, 1])
+ax.set_aspect(1.0) # the aspect ratio should be 1 here
+line, = ax.plot(cos(a0*t)*exp(-d0*t), sin(t)*exp(-d0*t))
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Example 3 - The code (Cont.)}
+And finally the common callback function for both sliders
+\begin{python}
+def update_curve(val):
+    a = slda.val
+    d = sldd.val
+    line.set_xdata(cos(a*t)*exp(-d*t))
+    line.set_ydata(sin(t)*exp(-d*t))
+
+slda.on_changed(update_curve)
+sldd.on_changed(update_curve)
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{... and the result}
+\includegraphics[width=\textwidth]{slider4.png}
+\end{frame}
+\end{document}

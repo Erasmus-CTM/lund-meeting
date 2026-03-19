@@ -1,0 +1,263 @@
+\documentclass[hyperref={pdfpagelabels=false},table]{beamer}
+
+\input{lec_common}
+\date{}
+\begin{document}
+
+\part{Unit 8: More about Plotting}
+
+%\frame{\tableofcontents}
+
+
+\begin{frame}[fragile]{Object oriented plotting in Python}
+\vfill
+In this unit we study the different components of a matplotlib plot and
+see how to work with them in an object oriented way.
+\vfill
+We first import the module
+\begin{python}
+ import matplotlib.pyplot as plt
+\end{python}
+\end{frame}
+
+\begin{frame}[fragile]{Preparations}
+There are two steps:
+\begin{itemize}
+ \item Construction of the \emph{internal} representation of a plot
+ \item Presenting a plot on the screen in a window or in the filesystem as a file in a special graphical file format, e.g.
+ pdf, png.
+\end{itemize}
+The second step requires some preparations, which have to be performed \emph{before} \texttt{pyplot} is imported.
+It is a selection of a backend.
+\end{frame}
+\begin{frame}[fragile]{Backends using Spyder}
+ Choose Inline (static) or Automatic (interactive). Then restart the kernel.
+ \vfill
+\includegraphics[width=.9\textwidth]{inlineOrAutomatic.png}
+
+\end{frame}
+\begin{frame}[fragile]{Command driven versus Object oriented Plotting}
+\pyth!matplotlib.pyplot! can be used with command-like functions.
+\vfill
+Various states are preserved.
+A state holds information about current figure and current axes.
+Under the hood, object oriented programmming (OOP) is used.
+\vfill
+\pyth!matplotlib! can be also be used for OOP.
+
+Instead of functions, methods of objects are used.
+For event driven programs, OOP should be used.
+(see next lecture on GUI:s)
+\end{frame}
+\begin{frame}[fragile]{Example: The command way to plot}
+ \begin{python}
+x1 = linspace(-2*pi, 2*pi, 100)
+x2 = linspace(0, 2, 10)
+
+plot(x1, sin(x1), 'r') # a figure is created
+plot(x1, cos(x1), 'b--')
+title('My first figure')
+
+figure() # a new figure is created
+
+plot(x2, sqrt(x2), 'go')
+plot(x2, x2**2, 'y^')
+title('My second figure')
+\end{python}
+The function calls plot, can be seen as commands. The same command results in different outcomes depending on the state.
+\end{frame}
+\begin{frame}[fragile]{A second example}
+\begin{python}
+x1 = linspace(-2*pi, 2*pi, 100)
+x2 = linspace(0, 2, 10)
+
+figure() # not needed when using Spyder
+subplot(211) # the first subplot using a 2 rows and 1 column grid
+plot(x1, sin(x1), 'r')
+plot(x1, cos(x1), 'b--')
+title('My first subplot')
+
+subplot(212) # the second subplot using a 2 rows and 1 column grid
+plot(x2, sqrt(x2), 'go')
+plot(x2, x2**2, 'y^')
+title('My second subplot')
+ \end{python}
+ The plots are made in a subplot of the current axes in the current figure.
+\end{frame}
+\begin{frame}[fragile]{matplotlib as an object-oriented interface}
+ For event driven programs you will need references to objects.
+ \vfill
+\includegraphics[width=.9\textwidth]{figAndAx.png}
+\end{frame}
+\begin{frame}[fragile]{OOP - getting references to objects}
+A single axis object
+\begin{python}
+ fig, ax = subplots()
+\end{python}
+\vfill
+Multiple axes object
+\begin{python}
+ fig, ax = subplots(nrows = 2, ncols = 3)
+ ax.shape   # (2,3)
+ type(ax[0,1])  #  matplotlib.axes._subplots.AxesSubplot
+\end{python}
+
+\end{frame}
+\begin{frame}[fragile]{Let's compare the two techniques}
+Using functions ...
+\begin{python}
+x = linspace(-2*pi, 2*pi, 100)
+
+figure() # not needed when using Spyder
+plot(x, sin(x/2), label = 'sine')
+plot(x, cos(x/2), label = '$\cos(x)$')
+legend(loc = 'lower center', fontsize = 'small')
+\end{python}
+Using methods ...
+\begin{python}
+x = linspace(-2*pi, 2*pi, 100)
+
+fig, ax = subplots()
+ax.plot(x, sin(x/2), label = 'sine')
+ax.plot(x, cos(x/2), label = '$\cos(x)$')
+ax.legend(loc = 'lower center', fontsize = 'small')
+\end{python}
+
+\end{frame}
+\begin{frame}[fragile]{The figure class}
+A figure object is the top level container for all plot elements.
+\begin{python}
+ fig, ax = subplots()
+# plotting code
+...
+\end{python}
+The figure can be saved into a file:
+\begin{python}
+ fig.figsave("my_figure.png")
+\end{python}
+Consider also the command \pyth!fig.canvas.get_supported_filetypes()!
+\end{frame}
+\begin{frame}[fragile]{The axes class}
+\includegraphics[width=.7\textwidth]{sphx_glr_anatomy_001.png}\\
+\vfill
+\hfill {\tiny (Image from \url{https://matplotlib.org/gallery/showcase/anatomy.html})
+
+}
+
+\end{frame}
+\begin{frame}[fragile]{Line plots}
+\begin{python}
+fig, ax = subplots(figsize = (6, 3))
+
+x =linspace(-2*pi, 2*pi, 100)
+
+ax.plot(x, sin(x), 'r--', label = "sine")
+ax.plot(x, cos(x), 'b', label = "cosine")
+
+print("The number of line plots is", len(ax.lines))
+print("Each line plot is of the type", type(ax.lines[0]))
+ \end{python}
+ The text output:
+\begin{verbatim}
+The number of line plots is 2
+Each line plot is of the type
+         <class 'matplotlib.lines.Line2D'>
+\end{verbatim}
+\end{frame}
+\begin{frame}[fragile]{Getter/Setter Methods}
+With the help of getter methods we can get information about the lines (and other objects):
+\begin{python}
+print("The linestyle of the first line plot is",
+                    ax.lines[0].get_linestyle())
+print("The color of the last line plot is",
+                    ax.lines[-1].get_color())
+\end{python}
+and we can even extract data from the line
+\begin{python}
+print("The first y-value of the first plot is ",
+                    ax.lines[0].get_ydata()[0])
+\end{python}
+Setter metods can be used to change attributes, e.g.
+\begin{python}
+ax.lines[0].set_linewidth(5)
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Line plots - getting a reference to a line plot}
+We can identify a line plot by its label:
+\begin{python}
+for line in ax.lines:
+    if line.get_label() == 'sine':
+        line.set_color('green')
+\end{python}
+\vfill
+Note, the plot method returns a list of line plots. In many cases that list has only one element:
+\begin{python}
+#unpacking a list of one element
+li_sin, = ax.plot(x, sin(x))
+li_cos, = ax.plot(x, cos(x))
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Coordinate axes - Labels}
+ \begin{python}
+fig, ax = subplots()
+x =linspace(-2*pi, 2*pi, 100)
+ax.plot(x, sin(x))
+
+ax.set_xlim(-3*pi, 3*pi)
+ax.set_ylim(-1.2, 1.2)
+ax.set_xlabel('x')
+ax.set_ylabel('sin(x)')
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Coordinate axes - Ticklabels}
+For publications and slides use few and relevant ticklabels:
+\begin{python}
+ax.set_xticks([-pi, 0, pi])
+ax.set_xticklabels(['-$\pi$', '$0$', '$\pi$'], fontsize = 16)
+
+# set minor ticks
+ax.set_xticks([-pi*1.5, -pi*0.5, pi*0.5, pi*1.5], minor = True)
+
+# use empty array to hide ticks
+ax.set_yticks([])
+\end{python}
+\hfill \includegraphics[width=0.4\textwidth]{TickSine.png}
+\end{frame}
+\begin{frame}[fragile]{Annotations}
+Annotations often are more attractive than a legend in the corner
+\begin{python}
+fig, ax = subplots()
+x =linspace(-1.5*pi, 1.5*pi, 100)
+ax.plot(x, sin(x))
+
+# we need space above the curve
+ax.set_ylim([-1.2, 2])
+
+ax.annotate("local max", xy = (pi/2, 1),
+            xytext = (pi, 1.8),
+            arrowprops = {'facecolor': 'green',
+                          'shrink': 0.1,
+                          'width': 2})
+\end{python}
+\hfill \includegraphics[width=0.3\textwidth]{annotatedSine.png}
+\end{frame}
+\begin{frame}[fragile]{Filling areas}
+Annotations often are more attractive than a legend in the corner
+\begin{python}
+fig, (ax1, ax2) = subplots(nrows = 1,
+                           ncols = 2, figsize = (15, 4))
+x =linspace(-2*pi, 2*pi, 100)
+y1, y2  = sin(x), cos(x)
+ax1.plot(x, y1, 'r')
+ax1.plot(x, y2, 'b')
+ax1.fill_between(x, y1, y2, color = 'green',
+                 alpha = 0.3)
+# specify fill condition using where
+ax2.plot(x, y1, 'r')
+ax2.plot(x, y2, 'b')
+ax2.fill_between(x, y1, y2, where = y1 > y2,
+                 color = 'red', alpha = 0.3)
+\end{python}
+\hfill \includegraphics[height=0.222\textheight]{fillSine.png}
+\end{frame}
+\end{document}

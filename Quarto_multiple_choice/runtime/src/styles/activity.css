@@ -1,0 +1,65 @@
+.activity {
+    border: 3px solid rgba(128, 128, 128, 0.412);
+    border-radius: 1rem;
+    max-width: 900px;
+    padding: 1em;
+    margin: 2em auto;
+}
+
+/* Clean list items in choice activity */
+.activity[data-act-type="choice"] ul>li {
+    list-style-type: none;
+}
+
+/* clearly indicate something is wrong with the activity */
+.activity.debug-error {
+    border: 4px dashed red;
+    pointer-events: none;
+}
+
+.activity-toolbar {
+    /* Prevent cls when client-rendering buttons */
+    min-height: 3em;
+    align-items: center;
+    display: flex;
+}
+
+.activity.correct {
+    border: 3px solid green;
+
+}
+
+.activity.incorrect {
+    border: 3px solid orange;
+
+}
+
+.activity-debug-info {
+    background-color: rgba(0, 0, 0, 0.402);
+    padding: 0.5em;
+    font-size: small;
+    overflow-x: scroll;
+}
+
+.activity-feedback {
+    border-left: 2px solid rgb(6, 187, 6);
+    background-color: #7bd76934;
+    padding: 1em;
+}
+
+.feedback-body {
+    margin: 1em 0;
+}
+
+.feedback-cause {
+    min-width: 20em;
+    width: fit-content;
+    border-left: 2px solid gray;
+    padding: 2px;
+    background-color: #7d7d7d3d;
+}
+
+.feedback-counter {
+    margin-left: 4px;
+    font-family: monospace;
+}

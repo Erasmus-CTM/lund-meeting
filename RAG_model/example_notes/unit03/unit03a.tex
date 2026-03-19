@@ -1,0 +1,153 @@
+\part{What are Floating Point Numbers?}
+\frame{\partpage}
+\begin{frame}[fragile]{How to create a floating point number?}
+\begin{itemize}
+\item by typing it, e.g. \pyth!a = 3.012! , or \pyth!a = 30.012e-1!, or \pyth!a=0.3012e+1! and other variants
+\item by typecasting from integer
+\begin{python}
+n=1
+a=float(n) # returns 1.0
+\end{python}
+\item as a result from a computation
+\begin{python}
+n=2
+m=2
+a=n/m   # returns 1.0
+c=3+5j
+\end{python}
+\end{itemize}
+
+We note \pyth!3.012 == 30.012e-1!. The decimal point "floats" depending on the given exponent.
+\end{frame}
+\begin{frame}[fragile]{Comparing floating point numbers}
+
+Operations on floating point numbers rarely return the exact result:
+\begin{python}
+0.4 - 0.3 # returns 0.10000000000000003
+\end{python}
+This facts matters, when \emph{comparing floating point numbers}:
+\begin{python}
+0.4 - 0.3 == 0.1  # returns False
+\end{python}
+
+Facit:\\
+Never compare floats by \pyth!==!. Ask instead if they are "near":
+\begin{python}
+abs((0.4-0.3) - 0.1 ) < 1.e-12
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Internal representation}
+Floats are represented by three quantities: the sign, the mantissa, and the exponent:
+\[
+\mathrm{sign} (x) \Bigl ( x_0 + x_1 \beta^{-1} + \ldots +
+x_{t-1}\beta^{-(t-1)} \Bigr ) \beta^{e}
+\]
+with $\beta \in \mathbb{N}$ and
+$x_0 \ne 0$, $0 \le x_i < \beta$.
+\vfill
+$x_0...x_{t-1}$ is the mantissa,\\
+$\beta$ the basis,
+$e$ exponent with $1-e_{\max} \le e \le e_{\max} $,
+$t$ is the mantissa length.
+\vfill
+Normalization $x_0 \ne 0$  makes the representation unique\\
+\hfill and saves in the case $\beta=2$ a bit.
+\end{frame}
+\begin{frame}[fragile]{Internal representation (Cont.)}
+$0$ cannot be represented as a \it{normalized} float.
+\vfill
+Two zeros $+0$ and $-0$.
+\vfill
+The exponent has a special inicator to indicate when a number is not normalized.
+\vfill
+On your computer:
+$\beta=2$, $t=52, e_{\max}=1023$. Together with the sign and the full range of the exponent this needs 64 bits.
+\end{frame}
+\begin{frame}[fragile]{Internal representation (Cont.)}
+Smallest positive representable number is
+\[
+    \mathrm{fl}_{\min}=1.\;2^{-1023} \approx 10^{-308}
+\]
+and the largest is
+\[
+   \mathrm{fl}_{\max}=1.111\ldots1\;2^{1023} \approx 10^{308}.
+\]
+\vfill
+Floating point numbers are not equally spaced in $[0,\mathrm{fl}_{max}]$.
+\end{frame}
+\begin{frame}[fragile]{Internal representation (Cont.)}
+Gap at zero:\\
+Distance between $0$ and the first positive number is $2^{-1023}$\\
+Distance between the first and the second is smaller by a factor
+$2^{-52} \approx 2.2\times 10^{-16}$,
+\begin{center}
+    \includegraphics[width=0.7\textwidth]{floatz}
+\end{center}
+\end{frame}
+\begin{frame}[fragile]{Infinite and Not a Number}
+
+
+There are in total
+$
+2 (\beta-1)\beta^{t-1}(2 e_{\max}+1)+1
+$
+floating point numbers.
+
+Numbers bigger than $\mathrm{fl}_{\max}$ generate in numpy an \pyth$inf$
+or an overflow exception
+
+Numbers smaller than $\mathrm{fl}_{\max}$ generate subnormalized numbers.
+
+
+\begin{python}
+exp(1000.)  #  inf
+a = inf
+3 - a       # -inf
+3 + a       #  inf
+
+a + a  # inf
+a - a  # nan
+a / a  # nan      # not a number
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Infinite and Not a Number (Cont.)}
+Unexpected results from \pyth!nan!
+
+\begin{python}
+x = nan
+x < 0 # False
+x > 0 # False
+x == x # False
+\end{python}
+
+The float \pyth{inf} behaves much more as expected:
+\begin{python}
+0 < inf # True
+inf <= inf # True
+inf == inf # True
+-inf < inf # True
+inf - inf  # nan
+exp(-inf)  # 0
+exp(1 / inf) # 1
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Machine Epsilon}
+\vfill
+\begin{Definition}[machine epsilon]
+The \emph{machine epsilon} or rounding unit
+is the largest number $\varepsilon$ such that
+\[
+\mathrm{float}(1.0+\varepsilon)=1.0
+\]
+\end{Definition}
+\vfill
+Write a program which finds this number (or a good estimate for it)
+\vfill
+See also
+
+\begin{python}
+import sys
+sys.float_info.epsilon # 2.220446049250313e-16 (depending on your system)
+\end{python}
+
+\end{frame}

@@ -1,0 +1,730 @@
+\documentclass[hyperref={pdfpagelabels=false},table]{beamer}
+
+\input{lec_common}
+\begin{document}
+
+\part{Unit 5: Linear Algebra}
+
+%\frame{\tableofcontents}
+
+
+\begin{frame}[fragile]{The \texttt{array} type}
+Lists are almost like vectors but the operations on list are \alert{not} the linear algebra operation.
+\begin{defblock}An \alert{array} represents a vector or a matrix in linear algebra. It is often initialised from a list or another vector. Operations \pyth{+}, \pyth!*!, \pyth!/!, \pyth!-! are all \alert{elementwise}. The function \pyth!dot! or the operator \pyth!@! is used for the scalar product.
+\end{defblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Vector usage}
+\begin{example}
+\begin{python}
+vec = array([1., 3.]) # a vector in the plane
+2*vec # array([2., 6.])
+vec * vec # array([1., 9.])
+vec/2 # array([0.5, 1.5])
+norm(vec) # norm
+vec @ vec # scalar product
+\end{python}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]{Vectors are similar to lists}
+\begin{itemize}
+\item Access vectors via their indices
+\begin{python}
+v = array([1., 2., 3.])
+v[0] # 1.
+\end{python}
+\item The \alert{length} of a vector is obtained by the function \pyth!len!.
+\begin{python}
+len(v) # 3
+\end{python}
+\item Parts of vectors using slices
+\begin{python}
+v[:2] # array([1., 2.])
+\end{python}
+\item Replace parts of vectors using slices
+\begin{python}
+v[:2] = [10, 20]
+v # array([10., 20., 3.])
+\end{python}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Vectors are not lists!}
+Operations are not the same:
+\begin{itemize}
+\item Operations \pyth{+} and \pyth{*} are \alert{different}
+\item More operations are defined: \pyth{-}, \pyth{/}
+\item Many functions act elementwise on vectors: \pyth!exp!, \pyth!sin!, \pyth!sqrt!, etc.
+\item Scalar product with \pyth!@!
+\end{itemize}
+\vfill
+\begin{itemize}
+\item Vectors have a \alert{fixed size}: no \pyth{append} method
+\item Only \alert{one type} throughout the whole vector\\ \hfill (usually \code{float}, \code{complex}, \code{int} or \code{bool})
+\item Vector slices are \alert{views}:
+\begin{python}
+v = array([1., 2., 3.])
+v1 = v[:2] # v is array([1.,2.])
+v1[0] = 0. # if v1 is changed ...
+v # ... v is changed too: array([0., 2., 3.])
+\end{python}
+\end{itemize}
+\end{frame}
+\begin{frame}[fragile]{More examples}
+\begin{python}
+v1 = array([1., 2., 3.]) # don't forget the dots!
+v2 = array([2, 0, 1.]) # one dot is enough
+v1 + v2; v1 / v2; v1 - v2; v1 * v2
+
+3*v1
+3*v1 + 2*v2
+\end{python}
+\vfill
+\begin{python}
+v1 @ v2 # scalar product
+cos(v1) # cosine, elementwise
+
+# access
+v1[0] # 1.
+v1[0] = 10
+
+# slices
+v1[:2] # array([10., 2.])
+v1[:2] = [0, 1] # now v1 == array([0.,1.,3.])
+v1[:2] = [1,2,3] # error!
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Creating Vectors \hfill (linspace)}
+The \pyth!linspace! method is a convenient way to create equally spaced arrays.
+\begin{python}
+xs = linspace(0, 10, 200) # 200 points between 0 and 10
+xs[0] # the first point is 0
+xs[-1] # the last is 10
+\end{python}
+So for example the plot of the sine function between 0 and 10 will be obtained by:
+\begin{python}
+plot(xs, sin(xs))
+\end{python}
+\end{frame}
+
+\begin{frame}[fragile]{Creating Vectors \hfill (zeros, ones, ...)}
+Some handy methods to quickly create vectors:
+\begin{description}
+\item[zeros] \pyth!zeros(n)! creates a vector of size $n$ filled with zeros
+\item[ones] \pyth!ones(n)! is the same filled with ones
+\item[full] \pyth!full(n, value)! creates a vector of size $n$ filled with \pyth!value!
+\item[rand] \pyth!rand(n)! creates a vector with {\tiny uniformly distributed} random numbers between 0 and 1
+\item[empty] \pyth!empty(n)! creates an ``empty'' vector of size $n$ \\ \hfill (try it!)
+\end{description}
+\end{frame}
+
+\begin{frame}[fragile]{Concatenating Vectors}
+We need a means to \emph{concatenate} vectors. This is where the command \pyth!hstack! comes to help. \pyth!hstack([v1, v2,..., vn])! concatenates the vectors \pyth!v1!, \pyth!v2!, \ldots, \pyth!vn!.
+\vfill
+\begin{exampleblock}{Symplectic permutation}
+We have a vector of size $2n$. We want to permute the first half with the second half of the vector with sign change:
+\[(x_1, x_2,\ldots,x_n,x_{n+1},\ldots,x_{2n})\mapsto (-x_{n+1}, -x_{n+2},\ldots,-x_{2n},x_1,\ldots,x_n)\]
+\begin{python}
+def symp(v):
+  n = len(v) // 2 # use the integer division //
+  return hstack([-v[-n:], v[:n]])
+\end{python}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Vectorized Functions}
+Note that \alert{not all functions} may be applied on vectors. For instance this one:
+\begin{python}
+def const(x):
+  return 1
+\end{python}
+We will see later how to automatically \emph{vectorize} a function so that it works componentwise on vectors.
+\end{frame}
+
+
+\begin{frame}[fragile]{Matrices as Lists of Lists}
+\begin{defblock}
+Matrices are represented by arrays of lists of \alert{rows}, which are lists as well.
+\end{defblock}
+\begin{python}
+# the identity matrix in 2D
+id = array([[1., 0.], [0., 1.]])
+# Python allows this:
+id = array([[1., 0.],
+            [0., 1.]])
+# which is more readable
+\end{python}
+\end{frame}
+
+\begin{frame}[fragile]{Accessing Matrix Entries}
+Matrix coefficients are accessed with \alert{two} indices:
+\begin{python}
+M = array([[1., 2.],[3.,4.]])
+M[0,0] # first row, first column: 1.
+M[-1,0] # last row, first column: 3.
+\end{python}
+\end{frame}
+
+\begin{frame}[fragile]{Creating Matrices}
+Some convenient methods to create matrices are:
+\begin{description}
+\item[eye] \pyth!eye(n)! is the identity matrix of size $n$
+\item[zeros] \pyth!zeros([n,m])! fills an $n\times m$ matrix with zeros
+\item[full] \pyth!full((n,m),a)! fills an $n\times m$ matrix with the value given by $a$
+\item[rand] \pyth!rand(n,m)! is the same with random values
+\item[empty] \pyth!empty([n,m])! same with ``empty'' values
+\end{description}
+\end{frame}
+
+\begin{frame}[fragile]{Shape}
+The \alert{shape} of a matrix is the tuple of its dimensions. The shape of an $n\times m$ matrix is \pyth!(n,m)!. It is given by the method \pyth{shape}:
+\begin{python}
+M = eye(3)
+M.shape # (3, 3)
+
+V = array([1., 2., 1., 4.])
+V.shape # (4,) <- tuple with one element
+\end{python}
+\vfill
+Tip:
+\begin{itemize}
+\item[] \pyth!zeros_like(A)! returns a matrix of the same shape as $A$ containing only zeros.
+\item[] \pyth!ones_like, empty_like, full_like! does the same but corresponding to the commands \pyth!ones, empty, full!.
+\end{itemize}
+\vfill
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Transpose}
+The \alert{transpose} of a matrix $A_{ij}$ is a matrix $B$ such that
+\[B_{ij} = A_{ji}\]
+
+By transposing a matrix you \alert{switch} the two shape elements.
+
+%You may \alert{switch} the two shape elements by \alert{transposing} the matrix.
+%The \alert{transpose} of a matrix $A_{ij}$ is a matrix $B$ such that
+%\[B_{ij} = A_{ji}\]
+\begin{python}
+A = ...
+A.shape # 3,4
+
+B = A.T # A transpose
+B.shape # 4,3
+\end{python}
+\vfill
+Note: $B$ is just a ``view'' of $A$. Altering $B$ changes $A$.
+\end{frame}
+
+\begin{frame}[fragile]{Matrix vector multiplication}
+The mathematical concept of \emph{reduction}:
+\[ \sum_{j} a_{ij} x_{j}\]
+is translated in Python in the function \pyth!dot!:
+\begin{python}
+angle = pi/3
+M = array([[cos(angle), -sin(angle)],
+           [sin(angle), cos(angle)]])
+v = array([1., 0.])
+Y = M @ v # the product M v
+\end{python}
+% \pause
+\begin{alertblock}{Elementwise vs. matrix multiplication}
+The multiplication operator \pyth!*! is \alert{always} elementwise. It has nothing to do with the dot operation. \pyth!A*V! is a legal operation which will be explained later on.
+\end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Dot product}
+\begin{description}
+\item[vector vector]  \hfill $s = \sum_ix_i y_i$ \hfill \pyth!s = x @ y!
+\vfill
+\item[matrix vector ]\hfill $ y_i =\sum_j A_{ij}x_j$ \hfill \pyth!y = A @ x!
+ \vfill
+\item[matrix matrix] \hfill $C_{ij} =\sum_{k} A_{ik}B_{kj} $ \hfill \pyth!C = A @ B!
+ \vfill
+\item[vector matrix] \hfill $y_j =\sum_i  x_i A_{ij}$ \hfill \pyth!y = x @ A!
+\vfill
+\end{description}
+\end{frame}
+\begin{frame}[fragile]{Solving a Linear System}
+If $A$ is a matrix and $b$ is a vector you solve the linear equation
+\[ A\cdot x = b\]
+using \pyth!solve! which has the syntax \pyth!x = solve(A,b)!.
+
+\begin{example}
+We want to solve
+\[\left\{\begin{aligned}x_1 &+ 2x_2 &= 1 \\ 3x_1 &+ 4x_2 &= 4\end{aligned}\right.\]
+\begin{python}
+from scipy.linalg import solve
+
+A = array([[1., 2.],
+           [3., 4.]])
+b = array([1., 4.])
+x = solve(A,b)
+A @ x  # should be almost b
+\end{python}
+\end{example}
+\end{frame}
+
+%\subsection{Matrix Slices}
+
+\begin{frame}[fragile]{Slices}
+Slices are similar to that of lists and vectors \alert{except} that there are now \alert{two dimensions}.
+\begin{description}
+\item[\texttt{M[i,:]}] a \emph{vector} filled by the row $i$ of $M$
+\item[\texttt{M[:,j]}] a \emph{vector} filled by the column $j$ of $M$
+\item[\texttt{M[2:4,:]}] slice \pyth!2:4! on the rows only
+\item[\texttt{M[2:4,1:4]}] slice on rows and columns
+\end{description}
+
+\begin{alertblock}{Omitting a dimension}
+If you omit an index or a slice, \scipy \hspace{.2em} assumes you are taking \alert{rows only}.
+\begin{description}
+\item[\texttt{M[3]}] is the third row of $M$
+\item[\texttt{M[1:3]}] is a matrix with the second and third rows of $M$.
+\end{description}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Altering a Matrix}
+You may alter a matrix using slices or direct access.
+\begin{itemize}
+\item \pyth!M[2,3] = 2.!
+\item \pyth!M[2,:] = <a vector>!
+\item \pyth!M[1:3,:] = <a matrix>!
+\item \pyth!M[1:4,2:5] = <a matrix>!
+\end{itemize}
+The matrices and vectors above \alert{must have the right size} to ``fit'' in the matrix $M$.
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Some technical terms}
+\vfill
+\begin{itemize}
+ \item[Rank] The rank of an array is the number of indices used to identify an element.
+A matrix has rank 2, a vector has rank 1, a scalar has rank 0.\\ \emph{Do not confound this term with the
+rank used in linear algebra.}
+\item[Shape] The shape is a tuple with the dimensions of the array: A $2 \times 3$ matrix is
+represented in Python by an array with shape $(2,3)$.
+\item[Length] The number of elements in an array. An array with shape $(2,3)$ has length $6$.
+An array with shape $(2,)$ (representing a vector) has length $2$.\\
+\emph{Do not confound this term with the term length used in linear algebra.}
+\end{itemize}
+\vfill
+\end{frame}
+
+\begin{frame}[fragile]{Rank of matrix slices}
+When slicing the rank of the result object is as follows:
+\begin{center}
+\begin{tabular}{l|l|l}
+access & rank & kind\\
+\hline\hline
+index,index & 0 & scalar \\\hline
+slice,index & 1 & vector \\\hline
+slice,slice & 2 & matrix\\
+\end{tabular}
+\end{center}
+% \pause
+\begin{example}
+\begin{columns}
+\begin{column}{4cm}
+\begin{overlayarea}{4cm}{3.5cm}
+\begin{onlyenv}<2>
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node{0} ; \& \node[style=m]{1}; \& \node[style=m]{2};  \& \node{3}; \\
+\node{4}; \& \node[style=m]{5}; \& \node[style=m]{6}; \& \node{7}; \\
+\node{8}; \& \node{9}; \& \node{10}; \& \node{11}; \\
+};
+\end{tikzpicture}
+\end{onlyenv}
+\begin{onlyenv}<3>
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node{0} ; \& \node{1}; \& \node{2};  \& \node{3}; \\
+\node[style=v]{4}; \& \node[style=v]{5}; \& \node[style=v]{6}; \& \node[style=v]{7}; \\
+\node{8}; \& \node{9}; \& \node{10}; \& \node{11}; \\
+};
+\end{tikzpicture}
+\end{onlyenv}
+\begin{onlyenv}<4>
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node{0} ; \& \node{1}; \& \node{2};  \& \node{3}; \\
+\node{4}; \& \node[style=s]{5}; \& \node{6}; \& \node{7}; \\
+\node{8}; \& \node{9}; \& \node{10}; \& \node{11}; \\
+};
+\end{tikzpicture}
+\end{onlyenv}
+\begin{onlyenv}<5>
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node{0} ; \& \node{1}; \& \node{2};  \& \node{3}; \\
+\node [style=m]{4}; \& \node [style=m]{5}; \& \node [style=m]{6}; \& \node [style=m]{7}; \\
+\node{8}; \& \node{9}; \& \node{10}; \& \node{11}; \\
+};
+\end{tikzpicture}
+\end{onlyenv}
+\begin{onlyenv}<6>
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node{0} ; \& \node{1}; \& \node{2};  \& \node{3}; \\
+\node{4}; \& \node[style=m]{5}; \& \node{6}; \& \node{7}; \\
+\node{8}; \& \node{9}; \& \node{10}; \& \node{11}; \\
+};
+\end{tikzpicture}
+\end{onlyenv}
+\end{overlayarea}
+\end{column}
+\begin{column}{7cm}
+\begin{tabular}{l|l|l|l}
+\hline
+\rowcolor{white}access & shape & rank & kind \\
+\hline\hline
+\rowcolor{matcolour}{\pyth!M[:2,1:-1]!} & $(2,2)$     & 2 & matrix\\ \hline
+\rowcolor{veccolour}{\pyth!M[1,:]!}     &  $4$        & 1 & vector\\ \hline
+\rowcolor{scalcolour}{\pyth!M[1,1]!}    & $\emptyset$ & 0 & scalar\\ \hline
+\rowcolor{matcolour}{\pyth!M[1:2,:]!}   & $(1,4)$     & 2 & matrix\\ \hline
+\rowcolor{matcolour}{\pyth!M[1:2,1:2]!} & $(1,1)$     & 2 & matrix\\
+\end{tabular}
+\end{column}
+\end{columns}
+\end{example}
+\end{frame}
+\begin{frame}[fragile]{Reshaping}
+From a given tensor (vector or matrix) one may obtain another tensor by \alert{reshaping}.
+\end{frame}
+
+
+\begin{frame}[fragile]{Reshaping Example}
+\begin{columns}
+\begin{column}{5cm}
+\begin{onlyenv}<1>
+\begin{python}
+A = arange(6)
+\end{python}
+\end{onlyenv}
+\begin{onlyenv}<2>
+\begin{python}
+A.reshape(1,6)
+\end{python}
+\end{onlyenv}
+\begin{onlyenv}<3>
+\begin{python}
+A.reshape(6,1)
+\end{python}
+\end{onlyenv}
+\begin{onlyenv}<4>
+\begin{python}
+A.reshape(2,3)
+\end{python}
+\end{onlyenv}
+\begin{onlyenv}<5>
+\begin{python}
+A.reshape(3,2)
+\end{python}
+\end{onlyenv}
+\end{column}
+\begin{column}{5cm}
+\begin{onlyenv}<1>
+\begin{tikzpicture}
+\matrix[nodes={style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node{0} ; \& \node{1}; \& \node{2};  \& \node{3}; \& \node{4}; \& \node{5}; \\
+};
+\end{tikzpicture}
+\end{onlyenv}
+\begin{onlyenv}<2>
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node{0} ; \& \node{1}; \& \node{2};  \& \node{3}; \& \node{4}; \& \node{5}; \\
+};
+\end{tikzpicture}
+\end{onlyenv}
+\begin{onlyenv}<3>
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node{0}; \\  \node{1}; \\  \node{2}; \\ \node{3}; \\  \node{4}; \\ \node{5}; \\ \\
+};
+\end{tikzpicture}
+\end{onlyenv}
+\begin{onlyenv}<4>
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node{0} ; \& \node{1}; \& \node{2}; \\   \node{3}; \& \node{4}; \& \node{5}; \\
+};
+\end{tikzpicture}
+\end{onlyenv}
+\begin{onlyenv}<5>
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node{0} ; \& \node{1}; \\ \node{2};  \& \node{3}; \\ \node{4}; \& \node{5}; \\
+};
+\end{tikzpicture}
+\end{onlyenv}
+\end{column}
+\end{columns}
+\end{frame}
+\begin{frame}[fragile]{Reshaping Trick}
+Note that Python can \alert{guess one of the new dimensions}. Just give a negative integer for the dimension to be guessed:
+\begin{python}
+A = arange(12) # a vector of length 12
+
+A.reshape(1,-1) # row matrix
+A.reshape(-1,1) # column matrix
+
+A.reshape(3,-1) # 3,4 matrix
+A.reshape(-1,4) # same
+\end{python}
+\end{frame}
+
+%\subsection{Building matrices}
+
+\begin{frame}[fragile]{Building Matrices}
+\begin{itemize}
+\item Piling vectors
+\item Stacking vectors
+\item Stacking column matrices
+\end{itemize}
+% \pause
+The universal method to build matrices is \pyth!concatenate!. This function is called by several convenient functions
+\begin{itemize}
+\item \pyth!hstack! to stack matrices \alert{horizontally}
+\item \pyth!vstack! to stack matrices \alert{vertically}
+\item \pyth!column_stack! to stack \alert{vectors} in columns
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Stacking Vectors}
+\begin{columns}
+\begin{column}{5cm}
+\begin{python}
+v1 = array([1,2])
+v2 = array([3,4])
+\end{python}
+\begin{python}
+vstack([v1,v2])
+\end{python}
+\begin{python}
+column_stack([v1,v2])
+\end{python}
+\end{column}
+\begin{column}{5cm}
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node[style=one]{1} ; \& \node[style=one]{2}; \\ \node[style=two]{3};  \& \node[style=two]{4}; \\
+};
+\end{tikzpicture}
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node[style=one]{1} ; \& \node[style=two]{3}; \\ \node[style=one]{2};  \& \node[style=two]{4}; \\
+};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+%\subsection{Array Methods}
+
+\begin{frame}[fragile]{sum, max, min}
+\begin{columns}
+\begin{column}{5cm}
+You may perform a number of operations on arrays, either on the whole array, or column-wise or row-wise. The most common are
+\begin{itemize}
+\item\alert{\textit{max}}
+\item \alert{\textit{min}}
+\item \alert{\textit{sum}}
+\end{itemize}
+\end{column}
+\begin{column}{5cm}
+\begin{example}
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node{1} ; \& \node{2}; \& \node{3};  \& \node{4}; \\
+\node{5} ; \& \node{6}; \& \node{7};  \& \node{8}; \\
+};
+\end{tikzpicture}
+\begin{python}
+A.sum()
+\end{python}
+36
+\end{example}
+\end{column}
+\end{columns}
+\end{frame}
+\begin{frame}[fragile]{sum, max, min \hfill axis parameter}
+\begin{columns}
+\begin{column}{5cm}
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node[style=one]{1} ; \& \node[style=two]{2}; \& \node[style=one]{3};  \& \node[style=two]{4}; \\
+\node[style=one]{5} ; \& \node[style=two]{6}; \& \node[style=one]{7};  \& \node[style=two]{8}; \\
+};
+\end{tikzpicture}
+\begin{python}
+A.sum(axis=0)
+\end{python}
+The result is a \alert{vector}
+\begin{tikzpicture}
+\matrix[nodes={style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node[style=one]{6} ; \& \node[style=two]{8}; \& \node[style=one]{10};  \& \node[style=two]{12}; \\
+};
+\end{tikzpicture}
+
+\end{column}
+\begin{column}{5cm}
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node[style=one]{1} ; \& \node [style=one]{2}; \& \node [style=one]{3};  \& \node [style=one]{4}; \\
+\node [style=two]{5} ; \& \node[style=two]{6}; \& \node [style=two]{7};  \& \node[style=two]{8}; \\
+};
+\end{tikzpicture}
+\begin{python}
+A.sum(axis=1)
+\end{python}
+The result is a \alert{vector}
+\begin{tikzpicture}
+\matrix[nodes={style=empty},minimum size= .8cm,ampersand replacement=\&]
+{
+\node[style=one]{10} ; \&  \node[style=two]{26}; \\
+};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+\begin{frame}[fragile]{Boolean Arrays}
+One may use \alert{Boolean arrays} to create a ``template'' for modifying another array:\\
+\vfill
+\begin{python}
+B = array([[True, False],
+           [False, True]])  # the template array
+M = array([[2, 3],
+           [1, 4]])         # the other array
+M[B] = 0    #  using the template
+M # [[0, 3], [1, 0]]
+M[B] = 10, 20
+M # [[10, 3], [1, 20]]
+\end{python}
+\end{frame}
+
+\begin{frame}[fragile]{Creating Boolean Arrays}
+It might be just as tedious to create the boolean array by hand than to change the array directly. There are however many methods to create Boolean arrays.
+% \pause
+
+Any \alert{logical operator} will create a Boolean array instead of a Boolean.
+
+\begin{python}
+M = array([[2, 3], [1, 4]])
+M > 2 # array([[False, True], [False, True]])
+M == 0 # array([[False, False], [False, False]])
+N = array([[2, 3], [0, 0]])
+M == N # array([[True, True], [False, False]])
+...
+\end{python}
+
+This allows the elegant syntax:
+\begin{python}
+M[M>2] = 0
+# all the elements > 2 are replaced by 0
+\end{python}
+\end{frame}
+
+\subsection{Comparing Arrays}
+
+\begin{frame}[fragile]{Comparing Arrays}
+Note that because array comparison create Boolean arrays, \alert{one cannot compare arrays directly}.
+
+
+The solution is to use the methods \pyth!all! and \pyth!any!:
+\begin{python}
+A = array([[1,2],[3,4]])
+B = array([[1,2],[3,3]])
+A == B # creates array([[True, True], [True, False]])
+(A == B).all() # False
+(A != B).any() # True
+\end{python}
+\end{frame}
+
+\begin{frame}[fragile]{Boolean Operations}
+For the same reason as before you
+\alert{cannot} use \pyth|and|, \pyth|or| nor \pyth!not! on Boolean arrays! Use the following replacement operators instead:
+
+\newcommand{\mytilde}{\raise.17ex\hbox{$\scriptstyle\mathtt{\sim}$}}
+\begin{center}
+\rowcolors[]{1}{blue!20}{blue!10}
+\begin{tabular}{c|c}
+\hline
+logic operator & replacement for Boolean arrays\\ \hline
+A and B & A \& B \\ \hline
+A or B & A | B\\ \hline
+not A & \mytilde A \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{python}
+a = array([True, True, False, False])
+b = array([True, False, True, False])
+
+a and b # error!
+a & b # array([True, False, False, False])
+a | b # array([True, Trues, True, False])
+~a # array([False, False, True, True])
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Universal Functions}
+\begin{defblock}
+A universal function (or ufunc) is a function that operates on arrays in an element-by-element fashion. That is, a ufunc is a “vectorized” wrapper for a function that takes a fixed number of scalar inputs and produces a fixed number of scalar outputs.
+\end{defblock}
+\vfill
+Examples:
+\begin{python}
+from scipy import *
+sin
+cos
+exp
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Vectorized Functions}
+Non-universal functions can be wrapped to behave like universal funtions.\\
+This is done by the command \pyth!vectorize!.\\
+\begin{python}
+# A non-universal function
+def heaviside(x):
+   if x >= 0:
+      return 1.
+   else:
+      return 0.
+
+heaviside(linspace(-1,1,100))  # returns an error
+
+vheaviside=vectorize(heaviside) # a new function
+vheaviside(linspace(-1,1,100)) # does the job
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Vectorized Functions \hfill (Cont.)}
+\begin{python}
+xvals=linspace(-1,1,100)
+plot(xvals,vectorize(heaviside)(xvals))
+axis([-1.5,1.5,-0.5,1.5])
+\end{python}
+\end{frame}
+
+\end{document}

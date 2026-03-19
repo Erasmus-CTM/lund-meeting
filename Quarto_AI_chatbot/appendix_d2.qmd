@@ -1,0 +1,345 @@
+---
+title: "Appendix D.2 Sequences and Sums"
+format: html
+filters:
+  - coatless-quarto/pyodide
+  - py-activity
+---
+
+Appendix D: A crash course in Python  
+NUMA01: Computational Programming with Python  
+Malin Christersson, Robert Klofkorn  
+
+## D.2 How to compute and visualize sequences and sums
+
+### Some ways to compute sequences in Python
+
+Suppose we want to compute many entries of the sequence
+$$\left(\frac{1}{2^k}\right)_{k=0}^\infty = \left(1, \frac{1}{2}, \frac{1}{4}, \dots \right).$$
+
+**Example D.17 (Computing sequences using a for-loop)**  
+The following two codes do exactly the same thing when run.
+
+```{pyodide-python}
+#| read-only: false
+print(1 / 2**0)
+print(1 / 2**1)
+print(1 / 2**2)
+```
+
+```{pyodide-python}
+#| read-only: false
+for k in range(0, 3):
+    print(1 / 2**k)
+```
+
+Another way of computing lists is to use a list comprehension. It has the benefit of
+both computing and storing a sequence of numbers in a single line of code.
+
+**Example D.18 (Computing sequences using a list)**  
+The following two codes do exactly the same thing when run.
+
+```{pyodide-python}
+#| read-only: false
+a = [1 / 2**0, 1 / 2**1, 1 / 2**2]
+print(a)
+```
+
+```{pyodide-python}
+#| read-only: false
+a = [1 / 2**k for k in range(0, 3)]
+print(a)
+```
+
+### Exercise D.19
+
+Run and compare the output of the codes in the above examples.
+
+### Exercise D.20
+
+A difference between the right-most codes in Examples D.17 and D.18 is that in the
+first, we do not store the values of the sequence anywhere. Here are two suggestions
+for how to fix this:
+
+```{pyodide-python}
+#| read-only: false
+a = 0
+for k in range(0, 3):
+    a = 1 / 2**k
+
+# TODO: print something useful here.
+```
+
+```{pyodide-python}
+#| read-only: false
+a = []
+for k in range(0, 3):
+    a.append(1 / 2**k)
+
+# TODO: print something useful here.
+```
+
+Explain what is going on in each code. What information is stored at the end of each
+program? Also, why do these not give any output? Can you fix this?
+
+### Some ways to compute partial sums of infinite series
+
+On the previous page, we discussed how to compute and store values of a sequence.
+Let us now consider how to compute the sum of the first, say, million terms of the
+infinite series
+$$\sum_{k=0}^{\infty} \frac{1}{2^k} = 1 + \frac{1}{2} + \frac{1}{4} + \cdots.$$
+
+**Example D.21 (Computing sums using a for-loop)**  
+The following two codes both compute the sum $1 + 1/2 + 1/4 + 1/8$.
+
+```{pyodide-python}
+#| read-only: false
+a = 0
+a = a + 1 / 2**0
+a = a + 1 / 2**1
+a = a + 1 / 2**2
+```
+
+```{pyodide-python}
+#| read-only: false
+a = 0
+for k in range(0, 3):
+    a = a + 1 / 2**k
+```
+
+**Example D.22 (Computing a sum using lists)**  
+The following two codes do exactly the same thing when run.
+
+```{pyodide-python}
+#| read-only: false
+a = [1 / 2**0, 1 / 2**1, 1 / 2**2]
+b = sum(a)
+```
+
+```{pyodide-python}
+#| read-only: false
+a = [1 / 2**k for k in range(0, 3)]
+b = sum(a)
+```
+
+Using this technique, we can compute the sum in just one line:
+
+```{pyodide-python}
+#| read-only: false
+b = sum([1 / 2**k for k in range(0, 3)])
+```
+
+### Exercise D.23
+
+1. Run the codes from the examples on this page. Why do they not give any output?
+   Fix this.
+2. Modify the code so that you can compute the sum of the first million terms or so.
+   What result do you get?
+
+```{pyodide-python}
+#| read-only: false
+# TODO: compute a partial sum for a large N and print the result.
+N = 10**6
+s = 0.0
+for k in range(0, N):
+    s += 1 / 2**k
+
+# TODO: print the result.
+```
+
+### How to visualize sequences and partial sums using for-loops
+
+**Example D.24**  
+The following code is perhaps the simplest way to visualize a sequence in Python.
+Here, we visualize the sequence $(1/2^k)_{k=0}^9$.
+
+```{pyodide-python}
+#| read-only: false
+import matplotlib.pyplot as plt
+
+for k in range(0, 10):
+    plt.plot(k, 1 / 2**k, "bo")
+
+plt.show()
+```
+
+Explanation:
+
+- `matplotlib.pyplot` provides plotting commands.
+- The `for` loop plots a blue dot at $(k, 1/2^k)$ for each `k`.
+- `plt.show()` displays the figure.
+
+Now modify the code so that we plot partial sums of the infinite series
+$$\sum_{k=0}^\infty \frac{1}{2^k}.$$
+
+**Example D.25**  
+The following code computes and visualizes the partial sums.
+
+```{pyodide-python}
+#| read-only: false
+import matplotlib.pyplot as plt
+
+a = 0
+for k in range(0, 3):
+    a = a + 1 / 2**k
+    plt.plot(k, a, "bo")
+
+plt.show()
+```
+
+### Exercise D.26
+
+Run this code, and verify by computing the first three partial sums by hand that the
+plot is correct. What happens when you increase `range(0, 3)` to, say,
+`range(0, 100)`?
+
+### Exercise D.27
+
+Several commands can be used to change how the above figure looks. Try inserting the
+following into the code anywhere after the `import` and before `plt.plot`. What
+happens?
+
+- Replace `"bo"` by `"rx"`.
+- `plt.xlim(-3, 15)`
+- `plt.ylim(-5, 2)`
+- `plt.xlabel("There was")`
+- `plt.ylabel("a graph")`
+- `plt.title("that had a title")`
+- `plt.xticks([-2, 0, 3, 4, 6.5, 10])`
+- `plt.yticks([0, 1, 1.5])`
+- `plt.grid(True)`
+- `plt.figure(figsize=(4, 3))`
+- `plt.savefig("myfigure.jpg")`
+
+Remark: Note that by choosing the extension `.jpg`, you tell Python to save your
+figure as a jpg file. Only a limited number of file formats are supported.
+
+### Visualizing sequences and partial sums stored as lists
+
+**Example D.28**  
+We now use lists to create and plot the sequence $(1/2^n)_{n=0}^9$.
+
+```{pyodide-python}
+#| read-only: false
+import matplotlib.pyplot as plt
+
+n_values = [n for n in range(0, 10)]
+a = [1 / 2**n for n in n_values]
+
+plt.plot(n_values, a, "bo")
+plt.show()
+```
+
+Explanation:
+
+- `n_values` gives the x-axis values.
+- `a` stores the sequence values.
+- `plt.plot(n_values, a, "bo")` plots the points.
+
+**Example D.29**  
+We now use lists to compute and plot partial sums of
+$$\sum_{k=0}^\infty \frac{1}{2^k}.$$
+
+```{pyodide-python}
+#| read-only: false
+import matplotlib.pyplot as plt
+
+indices = [i for i in range(0, 20)]
+a = [1 / 2**k for k in indices]
+S = [sum(a[0:n + 1]) for n in indices]
+
+plt.plot(indices, S, "bo")
+plt.show()
+```
+
+The key line is the list comprehension:
+`S = [sum(a[0:n + 1]) for n in indices]`. Remember that `a[0:n + 1]` contains the
+entries `a[0], a[1], ..., a[n]`.
+
+### Exercise D.30
+
+Implement the code in Example D.29. Verify that it gives the same output as
+Example D.25 when the range in the latter example is suitably adjusted.
+
+### A slightly more advanced example: the Fibonacci sequence
+
+The Fibonacci numbers are
+$$1, 1, 2, 3, 5, 8, 13, \dots$$
+and satisfy $a_n = a_{n-1} + a_{n-2}$ for $n \ge 2$ when we set $a_0 = 1$ and
+$a_1 = 1$.
+
+**Example D.31**  
+The following code can be used to compute Fibonacci numbers.
+
+```{pyodide-python}
+#| read-only: false
+a = [1, 1]
+
+for n in range(2, 20):
+    new_term = a[n - 1] + a[n - 2]
+    a.append(new_term)
+
+for n in range(0, 20):
+    print("The", n + 1, "th Fibonacci number is", a[n])
+```
+
+### Exercise D.32
+
+Implement the code from the above example. Use a reference (for example, a list of
+Fibonacci numbers) to verify that it gives the correct output.
+
+### Exercise D.33
+
+Use the method of the above examples to create a list containing a few partial sums
+of the infinite series $\sum_{k=0}^\infty 1/2^k$.
+
+```{pyodide-python}
+#| read-only: false
+# TODO: build a list of partial sums for 1/2**k.
+```
+
+### Remark D.34 (for-loops versus list comprehensions)
+
+Pure for-loops are available in most programming languages, while list
+comprehensions are specific to Python. If you want to adapt to other languages,
+use list comprehensions sparingly.
+
+### Remark D.35 (how to time a computation)
+
+You can measure how long it takes for a program to run. Here is how:
+
+```{pyodide-python}
+#| read-only: false
+import time
+
+time_start = time.process_time()
+
+# Your code here
+
+time_elapsed = time.process_time() - time_start
+print(time_elapsed)
+```
+
+### Exercise D.36
+
+Consider the code:
+
+```{pyodide-python}
+#| read-only: false
+S = 0
+for n in range(1, 100000):
+    S = S + 1 / n
+
+print(S)
+```
+
+1. What does the code compute?
+2. Do the same as in (1), except by first creating a sequence `a` and then computing
+   its sum using `sum(a)`.
+3. Use the timing code above to compare which method is fastest.
+
+### Remark D.37
+
+Python is useful but fairly slow. Built-in commands are usually implemented in
+faster languages (such as C++), so if speed is important, use built-in functions
+as much as possible.

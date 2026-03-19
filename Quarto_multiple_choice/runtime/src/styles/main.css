@@ -1,0 +1,6 @@
+/* Collect all commonly used styles in one file */
+
+@import "./activity.css";
+@import "./debug_widget.css";
+@import "./loading.css";
+@import "./ui.css";

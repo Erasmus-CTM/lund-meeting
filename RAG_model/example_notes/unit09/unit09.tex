@@ -1,0 +1,291 @@
+\documentclass[hyperref={pdfpagelabels=false},table, handout]{beamer}
+
+\input{lec_common}
+\begin{document}
+
+\part{Unit 09: Tests and  Profiling}
+
+
+
+\begin{frame}{Why Tests?}
+
+\begin{center}
+        {\Huge ?}
+\vfill\pause
+\end{center}
+\begin{itemize}
+        \item Because you do them \alert{anyway}
+        \item Because it will keep your code \alert{alive}.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Automated Tests}
+Automated tests 
+\begin{itemize}
+\item ensure a constant (high) quality standard of your code
+\item serve as a documentation of the use of your code
+\item document the test cases $\rightarrow$ test protocol
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Example}
+Let's assume we want to test an implementation of the bisection algorithm:
+\begin{python}
+def bisect(f, a, b, tol=1.e-8):
+    if f(a) * f(b) >0:
+       raise ValueError("Incorrect initial [a, b]")   
+    for i in range(100):
+        c = (a + b) / 2.
+        if f(a) * f(c) <= 0:
+           b = c
+        else:
+           a = c
+        if abs(a - b) < tol:
+           return (a + b) / 2
+    raise Exception('No root found')   
+\end{python}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Example (Cont.)}
+We check a problem with a known solution.\\
+Does the code find a zero of $f(x)=x$? 
+\begin{python}
+def test_identity():
+    result = bisect(lambda x: x, -1., 1.) 
+    expected = 0.
+    assert allclose(result, expected),'expected zero not found'
+
+test_identity()
+\end{python}
+Note the command \pyth{allclose}
+\end{frame}
+\begin{frame}[fragile]{Example (Cont.)}
+Does the code handle wrong input correctly? \vfill
+\begin{python}
+def test_badinput():
+  try:
+    bisect(lambda x: x,0.5,1)
+  except ValueError:
+    pass
+  else:
+    raise AssertionError()
+
+test_badinput()
+\end{python}
+
+
+\end{frame}
+
+
+\subsection{unittests}
+\begin{frame}[fragile]{Unittest Test Cases}
+You will want to \alert{put your tests together} and automatize them:
+\begin{python}
+from bisection import bisect
+import unittest
+
+class TestIdentity(unittest.TestCase):
+    def test(self):
+        result = bisect(lambda x: x, -1.2, 1.,tol=1.e-8)
+        expected = 0.
+        self.assertAlmostEqual(result, expected)
+
+if __name__=='__main__':
+    unittest.main()
+\end{python}
+\end{frame}
+
+\begin{frame}[fragile]{Test results}
+Here the results with two different tolerance parameters:
+
+\tiny
+\begin{lstlisting}
+Ran 1 test in 0.002s
+
+OK
+\end{lstlisting}
+\normalsize
+
+... and here with a loose tolerance
+\tiny
+\begin{lstlisting}
+F
+======================================================================
+FAIL: test (__main__.TestIdentity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<ipython-input-11-e44778304d6f>", line 5, in test
+    self.assertAlmostEqual(result, expected)
+AssertionError: 0.00017089843750002018 != 0.0 within 7 places
+
+----------------------------------------------------------------------
+Ran 1 test in 0.004s
+
+FAILED (failures=1)
+
+\end{lstlisting}
+\normalsize
+\end{frame}
+
+\begin{frame}[fragile]{Unittest: Grouping tests together}
+We recommend to group tests together
+\begin{python}
+class TestIdentity(unittest.TestCase):
+     def identity_fcn(self,x):
+         return x
+     def test_functionality(self):
+         result = bisect(self.identity_fcn, -1.2, 1.,tol=1.e-8)
+         expected = 0.
+         self.assertAlmostEqual(result, expected)
+     def test_reverse_boundaries(self):
+         result = bisect(self.identity_fcn, 1., -1.)
+         expected = 0.
+         self.assertAlmostEqual(result, expected)
+     def test_exceeded_tolerance(self):
+         tol=1.e-80
+         self.assertRaises(Exception, bisect, self.identity_fcn, 
+                             -1.2, 1.,tol)        
+if __name__=='__main__':
+       unittest.main()
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{unittest.TestCase.assertRaises}
+Note the method \pyth{assertRaises}:\vfill
+\begin{itemize}
+\item Exception: the expected exception type
+\item bisect: the function to be called
+\item self.identity\_fcn, -1.2, 1.,tol: the parameters of this function
+\end{itemize}
+\vfill
+\end{frame}
+\begin{frame}[fragile]{Unittest: Preparing tests}
+Sometimes the execution of tests need some preparation. See special method \pyth{setUp}:
+\begin{python}
+class TestFindInFile(unittest.TestCase):
+     def setUp(self):
+         file = open('test_file.txt', 'w')
+         file.write('aha')
+         file.close()
+         self.file = open('test_file.txt', 'r')
+     def tearDown(self):
+         os.remove(self.file.name)
+     def test_exists(self):
+         line_no=find_string(self.file, 'aha')
+         self.assertEqual(line_no, 0)
+     def test_not_exists(self):
+         self.assertRaises(NotFoundError, 
+                 find_string,self.file, 'bha')
+
+if __name__=='__main__':
+                unittest.main() 
+\end{python}        
+
+\end{frame}
+
+\begin{frame}[fragile]{Unittest: Preparing tests\hfill(Cont.)}
+... and here the functions which we want to test
+\begin{python}
+class NotFoundError(Exception):
+      pass
+
+def find_string(file, string):
+    for i,lines in enumerate(file.readlines()):
+       if string in lines:
+          return i
+    raise NotFoundError('String {} not found in File {}'.
+                               format(string,file.name)) 
+\end{python}        
+
+\end{frame}
+
+
+
+\section{Profiling}
+
+
+\begin{frame}[fragile]{Slow code}
+The code is slow. Why?
+
+\vfill
+
+Three possible reasons:
+\begin{itemize}
+\item The problem is big \hfill \emph{Not much to do about this}
+\item The algorithm is inherently slow \hfill \emph{Nor this}
+\item The implementation is bad (recursive, etc.) \hfill \emph{We can fix this!}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Finding the slow parts}
+Different parts of the code are differently fast.
+
+\vfill
+
+\emph{Profiling} means that we run the program and measure how much time is spent in each function.
+
+\vfill
+
+A good way to do this in Python is to use the \pyth!cProfile! module.
+
+\end{frame}
+
+\begin{frame}[fragile]{The timeit module}
+The \pyth!timeit! module is ideal for measuring execution time for short statements:
+
+\vfill
+ What is faster?
+\begin{python}
+def var1():
+   [i**2 for i in range(10000) if i%2==0]
+     
+def var2():
+   li=[]
+   for i in range(10000):
+      if i%2==0:
+          li.append(i**2)
+\end{python}
+
+When this code is saved in \pyth!timeit_ex.py!, then
+
+\begin{python}
+import timeit as ti
+t1=ti.Timer('te.var1()','import timeit_ex as te')
+t1.timeit(100) # a hundred executions
+t2=ti.Timer('te.var2()','import timeit_ex as te')
+t2.timeit(100) # a hundred executions
+\end{python}
+
+gives us the answer....
+
+\vfill
+
+\end{frame}
+
+\begin{frame}[fragile]{The timeit module \hfill (Cont.)}
+ The \pyth!timeit! module provides a \pyth!Timer! class
+ with the signature
+\begin{python}
+class Timer(stmt[,setup]):  
+\end{python}
+\vfill
+where 
+
+\pyth!stmt! is a string containing the statement(s) to be executed.\\
+\pyth!setup! is a string with the statement(s) executed beforehand, i.e. not affecting the time measurement.
+
+\vfill
+
+It has a method \pyth! timeit! which takes the numbers of repetitions as argument
+\vfill
+\end{frame}
+
+
+\begin{frame}{Other timeing Methods}
+\vfill
+For other timeing methods consult the course book.
+\vfill
+\end{frame}
+\end{document}

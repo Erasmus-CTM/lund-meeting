@@ -1,0 +1,637 @@
+\documentclass[hyperref={pdfpagelabels=false},table]{beamer}
+
+\input{lec_common}
+\begin{document}
+
+\part{Unit 6 (Cont.): Object oriented programming with classes}
+
+%\frame{\tableofcontents}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Example: RationalNumber}
+
+  Let's reconsider the example with the class \pyth{RationalNumber}.
+
+\begin{python}
+class RationalNumber:
+    def __init__(self,numerator,denominator):
+        if not isinstance(numerator,int) :
+             raise TypeError(
+                   "numerator should be of type int")
+        if not isinstance(denominator,int) :
+             raise TypeError(
+                   "denominator should be of type int")
+        self.numerator=numerator
+        self.denominator=denominator
+\end{python}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Everything can be changed}
+
+  By \alert{default} all members in a Python class are \alert{public}. 
+  Any member can be accessed from outside the class environment. 
+  Everything can be changed after creating an instance. \\ \ \\
+
+  In other programming languages such as C++ or Java there exist 
+  concepts for public, protected and private members in a class. \\ \ \\
+
+  \pause
+
+\begin{python}
+  r = RationalNumber(2,3)
+  print(r)                        # 2/3 
+  r.numerator = 23                # error-prone  
+  r.name = "my favorite fraction" # a new attribute! 
+  print(r)                        # 23/3
+\end{python}
+
+\pause
+
+We can even delete an attribute!
+
+\begin{python}
+  r = RationalNumber(2,3)
+  del r.numerator   
+  print(r)                        # error
+\end{python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Changing attributes}
+
+We can \alert{protect} attributes. 
+\structure{By convention} attributes that have a leading underscore 
+are meant for internal use only.
+
+\begin{python}
+class RationalNumber:
+    def __init__(self,numerator,denominator):
+        ....
+        self._numerator=numerator
+        self._denominator=denominator
+    def getNum(self):
+        return self._numerator
+    def setNum(self, numerator):
+        self._numerator = numerator
+\end{python}
+
+\pause 
+
+\begin{python}
+r = RationalNumber(2, 3)
+print(r._numerator)  # bad style
+print(r.getNum())    # good style
+r._numerator = 23    # bad style
+r.setNum( 23 )       # good style
+\end{python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{A triangle example}
+
+  \includegraphics[width=\textwidth]{triangle}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Attributes depending on each other -- A guiding example}
+Let us assume the following class to define a triangle
+\begin{python}
+class Triangle:
+    def __init__(self, A, B, C):
+        self.A = array(A)
+        self.B = array(B)
+        self.C = array(C)
+        self.a = self.C - self.B
+        self.b = self.C - self.A
+        self.c = self.B - self.A
+    def area(self):
+        return abs(cross(self.b, self.c))/2
+\end{python}
+An instance of this triangle is created by
+\begin{python}
+tr = Triangle([0.,0.], [1.,0.], [0.,1.])
+\end{python}
+and its area is computed by
+\begin{python}
+tr.area() # returns 0.5
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Altering an attribute}
+Altering an attribute,
+\begin{python}
+tr.B = array([1.0, 0.1])
+\end{python}
+does not affect the attribute 'area':
+\begin{python}
+tr.area() # still 0.5
+\end{python}
+We have to be able to run ``internally'' some commands when one attribute is
+changed in order to modify the others!
+\vfill
+For this end we introduce attributes only for internal use, e.g \pyth!_B! \\
+and ...
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{The property command}
+
+We can bind the getter and setter methods to a property \pyth{B}. 
+The property B is accessed directly but internally the getter and setter 
+methods will use the hidden attribute \pyth{_B}.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Altering an attribute \hfill (Cont.)}
+... and modify our class
+\begin{python}
+class Triangle:
+    def __init__(self,A, B, C):
+        self._A = array(A)
+        self._B = array(B)
+        self._C = array(C)
+        self._a = self._C - self._B
+        self._b = self._C - self._A
+        self._c = self._B - self._A
+    def area(self):
+        return abs(cross(self._c, self._b)) / 2.
+    def setB(self,B):
+        self._B = B
+        self._a = self._C - self._B
+        self._c = self._B - self._A
+    def getB(self):
+        return self._B
+    B=property(fget = getB, fset = setB)
+\end{python}
+\vfill
+{\small What would happen if we change \pyth!self._B! to \pyth!self.B!?}
+\end{frame}
+\begin{frame}[fragile]{A triangle has three corners}
+Python allows us to delete an attribute
+\vfill
+\begin{python}
+del tr.B
+\end{python}
+If so, we won't have a triangle any more. So let's prohibit deletion
+\begin{python}
+class Triangle:
+  ...
+  def delPoint(self):
+    raise Exception("A triangle point cannot be deleted")
+  B = property(fget = getB,
+               fset = setB,
+               fdel = delPoint)
+\end{python}
+\vfill
+\begin{python}
+del tr.B # now raises an exception
+\end{python}
+
+\end{frame}
+
+\begin{frame}[fragile]{Inheritance - a mathematical concept}
+Mathematics builds on class inheritance principles:
+
+\vfill
+
+Example of a mathematical inheritance hierarchy
+
+\begin{itemize}
+\item {\em Functions} \\ {\small can be evaluated, differentiated, integrated, summed up, ....}
+% \item {\em Polynomials} are functions\\ {\small we can delete coefficients, ...}
+% \item {\em Trigonometric polynomials} are polynomials \\ {\small same methods as polynomials, change representation, ask for real parts, truncate, ...}
+\item {\em Polynomials} are functions\\ {\small same methods as functions, change representation, truncate, ...}
+\item {\em Trigonometric polynomials} are polynomials \\ {\small same methods as polynomials, ask for real parts, ...}
+\end{itemize}
+\vfill
+
+We say {\it polynomials inherit properties and methods from functions}.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Inheritance}
+
+Example -- lines
+
+A line can be defined by two points $A$ and $B$.
+
+We will define a parent class, or base class, \pyth{Line}.
+
+  Then we will define two child classes, or derived classes, \pyth{DashedLine} and \pyth{NonVerticalLine}.
+
+To make a class that is a child class of som parent class, the parent class name is written inside parenthesis:
+
+\begin{python}
+class ChildClass(ParentClass):
+    ...
+\end{python}    
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{The base class}
+
+\begin{python}
+class Line:
+    def __init__(self, A, B):
+        self.A = array(A)
+        self.B = array(B) 
+    def plot(self):
+        grid()  #  grid and plot from pyplot
+        plot([self.A[0], self.B[0]], [self.A[1], self.B[1]])
+
+L = Line([1, 1], [5, 3])
+L.plot()
+\end{python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Defining a derived class \pyth{DashedLine}}
+
+  A \pyth{DashedLine} inherits all data attributes and all methods 
+  from \pyth{Line} but the plot method is redefined, 
+  overriding the method of the base class.
+
+\begin{python}
+class DashedLine(Line): # indicate that class 
+                        # is derived from Line
+    def plot(self):  # override the plot method
+        plot([self.A[0], self.B[0]], [self.A[1], self.B[1]],"--")
+
+dl = DashedLine([1, 1], [5, 3])
+print(f"dl.A = {dl.A}, dl.B = {dl.B}")
+dl.plot() 
+\end{python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Using \pyth{super()}}
+
+  We can make another derived \pyth{class NonVerticalLine}. 
+  It has the same attributes as \pyth{Line}, 
+  but also the attributes \pyth{slope} and \pyth{y_intercept}.
+
+  To call the \pyth{__init__} method of the parent class, 
+  we refer to the parent class by using \pyth{super()}.
+
+\begin{python}
+class NonVerticalLine(Line):
+    def __init__(self, A, B): # override init method
+        super().__init__(A, B)
+        self.slope = (B[1]-A[1])/(B[0]-A[0]) # may raise a ZeroDivisionError
+        self.yIntercept = A[1] - self.slope*A[0]
+
+    def f(self, x):
+        return self.slope*x + self.yIntercept
+
+L = NonVerticalLine([-1, -1], [4, 1])
+print(f"L.A = {L.A}, L.B = {L.B}, L.slope = {L.slope}, L.yIntercept = {L.yIntercept}")
+L.plot()
+\end{python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{\pyth{isinstance} and \pyth{issubclass}}
+
+A non-vertical line is also a line.
+
+\begin{python}
+L = NonVerticalLine([1, 2], [2, 4])
+
+print(isinstance(L, Line))
+print(isinstance(L, NonVerticalLine))
+print(isinstance(L, DashedLine))
+\end{python}
+
+\pause 
+
+We can check if a class is a derived class of another class
+
+\begin{python}
+# NonVerticalLine is a subclass of Line
+print(issubclass(NonVerticalLine, Line))  
+# Line is not a subclass of NonVerticalLine
+print(issubclass(Line, NonVerticalLine)) 
+\end{python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Objects that act like functions}
+
+Recall that the \pyth{quad} function can only be used on functions with one single parameter. 
+
+\begin{python}
+from scipy.integrate import quad
+
+def f(x):
+    return 2*sin(0.5*x)
+
+def g(x, A, omega):
+    return A*sin(omega*x)
+
+a = quad(f, 0, pi) # works
+print(a)
+
+b = quad(g, 0, pi) # doesn't work
+\end{python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Objects that act like functions (cont.)}
+
+We can make a class that has a value method corresponding to a function value.  
+
+\begin{python}
+class Sin:
+    def __init__(self, A, omega):
+        self.A = A
+        self.omega = omega
+    def value(self, x):
+        return self.A*sin(self.omega*x)
+    def __repr__(self):
+        return f"{self.A}*sin({self.omega}x)"
+
+sin1 = Sin(1, 1)
+sin2 = Sin(2, 0.5)
+print(sin1)
+print(sin2)
+
+a = quad(sin1.value, 0, pi)
+b = quad(sin2.value, 0, pi)
+print(a)
+print(b)
+\end{python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{The special method \pyth{__call__}}
+
+\begin{python}
+class Sin:
+    def __init__(self, A, omega):
+        self.A = A
+        self.omega = omega
+    def __call__(self, x): # easier to use than the
+                           # previous value method 
+        return self.A*sin(self.omega*x)
+    def __repr__(self):
+        return f"{self.A}*sin({self.omega}x)"
+
+sin1 = Sin(1, 1)
+sin2 = Sin(2, 0.5)
+print(sin1(pi/2))  # print sin at position pi/2, 
+print(sin2(pi))    # here __call__ is executed
+
+a = quad(sin1, 0, pi) # sin1.__call__ is used
+b = quad(sin2, 0, pi) # sin2.__call__ is used
+print(a)
+print(b)
+\end{python}  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Arithmetic operators for functions}
+In mathematics we can add functions.
+
+ \begin{eqnarray*} 
+   f(x) &=& sin(x) \\
+   g(x) &=& cos(x) \\
+   h(x) &=& f(x) + g(x)
+ \end{eqnarray*}
+
+\pause 
+
+In Python this is not directly possible:
+
+\begin{python}
+f = sin
+g = cos
+h = f + g  # error 
+\end{python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Adding functions}
+
+With the concept of classes, we can program an elegant work-around.
+
+\begin{python}
+class Function: # encapsulate a function
+    def __init__(self, f):
+        self.f = f
+    def __call__(self, x):
+        return self.f(x)
+    def __add__(self, g):
+        def sum(x):
+            return self(x)+g(x)
+        return type(self)(sum) # return an instance of the same class
+
+f = Function(sin)
+g = Function(cos)
+h = f + g
+x = linspace(-pi, pi)
+plot(x, f(x), "--", x, g(x), "--", x, h(x))
+\end{python}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Class attributes, static and class methods}
+
+  In following class, \pyth{_clsVar} is a class data attribute, 
+  \pyth{_instVar} is an instance data attribute.
+
+\begin{python}
+class A:
+  _clsVar = 0 # class attribute, or static attribute
+  
+  def __init__(self):
+    self._instVar = 0 # an instance data attribute
+
+  def instMth(self, x): # the first arg is the inst
+    print(f"executing instMth({self}, {x})")
+        
+  @classmethod
+  def classMth(cls, x): # the first arg is the class
+    print(f"executing classMth({cls}, {x})")
+
+  @staticmethod
+  def staticMth(x): # a function bound to the class
+    print(f"executing staticMth({x})")
+\end{python}  
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Class attributes, static and class methods}
+
+\begin{python}
+a = A()
+# What happens?
+a.instMth(1)
+A.instMth(1)
+a.classMth(2)
+A.classMth(2)
+a.staticMth(3)
+A.staticMth(3)
+\end{python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Class attributes -- \pyth{refcounter.py}}
+
+\begin{python}
+class RationalNumber:
+  _nInstances = 0 # class attribute
+  def __init__(self ,numerator ,denominator):
+    self._numerator   = numerator
+    self._denominator = denominator
+
+    # increase reference counter, note the self here
+    self.inc()
+
+  # destructor called when object is deleted
+  def __del__(self):
+    # decrease reference counter
+    self.dec()
+
+  @classmethod # increase class attribute by one
+  def inc(cls):
+    cls._nInstances += 1
+
+  @classmethod
+  def dec(cls): # decrease class attribute by one
+    cls._nInstances -= 1
+\end{python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{Summary}
+
+  \begin{itemize}
+    \item Instance methods needs an object and can access the object through a parameter \pyth{self}.
+    \item Class methods are in the namespace of a class and can access the class through a parameter \pyth{cls}.
+    \item Static methods are in the namespace of a class but cannot access either the class or an instance.
+  \end{itemize}
+
+  \pause
+
+  \vskip 5pt 
+
+  The words \pyth{self} and \pyth{cls} are not reserved words but conventions.
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{comment}
+\begin{frame}[fragile]{Inheritance in Python: An example}
+\vfill
+To solve an ordinary differential equation
+\[
+\dot x = f(t,x) \;\;x(0)=x_0
+\]
+you used in another course Euler's method
+\[
+ u_{i+1} = u_i + h f(t_i, u_i), \;\;\; \text{with } u_0=x_0\;\text{and}\;t_i=t_{i-1}+h .
+\]
+\vfill
+It is a special case of a family of methods of the type
+\[
+ u_{i+1} = u_i + h \Phi(f,u_i,t_i,h) .
+\]
+\end{frame}
+\begin{frame}[fragile]{Inheritance - in Python}
+We consider a general integrator class performing:
+\[
+ u_{i+1} = u_i + h \Phi(f,u_i,t_i,h) .
+\]
+\begin{python}
+class Onestepmethod:
+  def __init__(self, f, x0, t0, te, N):
+    self.f = f
+    self.x0 = x0
+    self.interval = [t0, te]
+    self.grid = linspace(t0, te, N)
+    self.h = (te - t0)/N
+  def step(self):
+    ti, ui = self.grid[0], self.x0
+    yield ti, ui
+    for t in self.grid[1:]:
+      ui = ui + self.h*self.phi(self.f,ui,ti)
+      ti = t
+      yield ti, ui        # see one of the next lectures
+  def solve(self):
+    self.solution = array([tu for tu in self.step()])
+\end{python}
+
+\end{frame}
+\begin{frame}[fragile]{Inheritance - in Python \hfill (cont.)}
+ ... construct from it two subclasses
+ \begin{python}
+class ExpEuler(Onestepmethod):
+    def phi(self, f, u, t):
+        return f(u, t)
+
+class MidPointRule(Onestepmethod):
+    def phi(self, f, u, t):
+        return f(u + self.h/2*f(u,t), t + self.h/2)
+\end{python}
+
+\end{frame}
+\begin{frame}[fragile]{Inheritance - in Python \hfill (cont.)}
+Which we then call
+\begin{python}
+def f(x, t):
+    return -0.5*x
+
+euler = ExpEuler(f, 15., 0., 10., 20)
+euler.solve()
+
+midpoint = MidPointRule(f, 15., 0., 10., 20)
+
+midpoint.solve()
+\end{python}
+\end{frame}
+\end{comment}
+
+\end{document}
+
+

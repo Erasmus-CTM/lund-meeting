@@ -1,0 +1,60 @@
+---
+title: "Py-activity Example"
+filters:
+  - py-activity
+---
+
+## Code exercises
+
+This filter formats 'activity code blocks' and injects JS and CSS.
+
+Here is a normal code block
+
+``` python
+x = "here is a plain python block."
+print(x)
+```
+
+Here is an activity (it doesnt do anything yet):
+
+``` python
+#|activity : code
+x = "here is an 'activity block'."
+print(x)
+```
+
+## Multiple choice questions
+
+These have a simpler UI (at least in terms of dependency and evaluation logic). Suitable for experimenting with AI interaction and prompt engineering.
+
+
+Here is another activity (Current supported syntax is a subset of [(quarto) quizdown](https://github.com/parmsam/quarto-quizdown)) (Markdown: div is more flexible than just codeblock)
+
+::: activity-choice
+
+What is the value of `1+1`?
+
+
+-   [ ] 1 (i.e the number one)
+-   [x] 2
+-   [ ] 3
+-   [ ] 4
+:::
+
+Choice with code block??
+
+::: activity-choice
+## Python Lists (multiple choice)
+
+What is the value of `x[2]`?
+
+``` python
+x = [2, 3, 4]
+print(x[2])
+```
+
+-   [ ] 1 (the **number**)
+-   [ ] 2
+-   [ ] 3
+-   [x] 4
+:::

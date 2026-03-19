@@ -1,0 +1,64 @@
+/* LOADING DIALOG (user needs to wait until pyodide is ready) */
+.loading-fullscreen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #0f172ad2;
+    backdrop-filter: blur(6px);
+    color: white;
+    z-index: 99;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: system-ui, sans-serif;
+}
+
+.loading-fullscreen .loader {
+    text-align: center;
+    background-color: #1a1a1a;
+    border-radius: 1em;
+    padding: 2em;
+}
+
+.loading-fullscreen h1 {
+    font-size: 2.5rem;
+    margin-top: 1rem;
+}
+
+.loading-fullscreen p {
+    opacity: 0.8;
+}
+
+.spinner {
+    width: 64px;
+    height: 64px;
+    border: 6px solid rgba(255, 255, 255, 0.2);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+#loading-small {
+    max-width: 300px;
+    position: fixed;
+}
+
+
+.spinner-small {
+    width: 20px;
+    height: 20px;
+    border: 6px solid rgba(255, 255, 255, 0.2);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 1em;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

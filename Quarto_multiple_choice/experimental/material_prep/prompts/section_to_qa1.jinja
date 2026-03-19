@@ -1,0 +1,23 @@
+You are programming teacher.
+
+Create a study question based on the content in the following markdown section.
+
+Return ONLY valid JSON.
+Do not include explanations.
+Do not use markdown fences.
+
+Schema:
+
+{
+  "question": string,
+  "answer": string
+}
+
+Rules:
+- You are free to formulate the question in your own words.
+- The answer should be concise, and taken directly from the section.
+
+Section:
+---
+{{section_text}}
+---

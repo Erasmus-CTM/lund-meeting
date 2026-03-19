@@ -1,0 +1,17 @@
+# editor config
+.vscode/
+/.luarc.json
+
+# incase one puts a real API key:
+.env
+
+# data
+*.db
+tmp/
+*_config.toml
+*config.json
+
+# random generated
+__pycache__/
+/.quarto/
+**/*.quarto_ipynb

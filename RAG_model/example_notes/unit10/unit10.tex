@@ -1,0 +1,324 @@
+\documentclass[hyperref={pdfpagelabels=false},table]{beamer}
+
+\input{lec_common}
+\date{}
+\newcommand{\fontsmall}{\fontsize{5pt}{6pt}\selectfont}
+\begin{document}
+
+\part{Unit 10: Pandas}
+
+%\frame{\tableofcontents}
+
+\begin{frame}[fragile]{A Guiding Example}
+This unit needs an example data source to demonstrate
+Pandas:  solar cells in Södra Sandby\\[0.5cm]
+\begin{minipage}[h]{0.4\textwidth}
+\lstset{basicstyle=\tiny}
+\pyth!solarWatts.dat!
+\begin{lstlisting}
+Date;Watt
+           :
+2019-10-20 08:22:00 ; 44.0
+2019-10-20 08:23:00 ; 61.0
+2019-10-20 08:24:00 ; 42.0
+           :
+\end{lstlisting}
+\end{minipage}
+\begin{minipage}[h]{0.4\textwidth}
+\lstset{basicstyle=\tiny}
+\pyth!price.dat!
+\begin{lstlisting}
+Date;SEK
+           :
+2019-10-20 01:00 ; 0.32
+2019-10-20 02:00 ; 0.28
+2019-10-20 03:00 ; 0.29
+           :
+\end{lstlisting}
+\end{minipage}
+\begin{minipage}[h]{0.4\textwidth}
+\lstset{basicstyle=\tiny}
+\pyth!rates.dat!
+\begin{lstlisting}
+Date;Euro_SEK
+       :
+2019-10-21 ; 10.7311
+2019-10-22 ; 10.7303
+2019-10-23 ; 10.7385
+       :
+
+\end{lstlisting}
+\end{minipage}
+\end{frame}
+\begin{frame}[fragile]{Typical questions?}
+\begin{itemize}
+\item When was the highest power production?
+\item Which day delivered the most energy?
+\item Which was the economical outcome in Euro per month?
+\item Was there a day where the solar cells were out of work?
+\end{itemize}
+\end{frame}
+\begin{frame}[fragile]
+\vfill
+The tool is Pandas dataframe
+\vfill
+\end{frame}
+\begin{frame}[fragile]{Pandas Dataframe versus Numpy Array}
+\vfill
+Let's start by just looking at an example
+\vfill
+\begin{minipage}{0.45\textwidth}
+\begin{python}
+A=array(
+     [[1.,2.,3.],
+      [4.,5.,6.]])
+print(A)
+\end{python}
+results in
+\begin{verbatim}
+[[1. 2. 3.]
+ [4. 5. 6.]]
+\end{verbatim}
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+\begin{python}
+import pandas as pd
+AF = pd.DataFrame(A)
+print(AF)
+\end{python}
+results in
+\begin{verbatim}
+     0    1    2
+0  1.0  2.0  3.0
+1  4.0  5.0  6.0
+\end{verbatim}
+\end{minipage}
+\vfill
+We see that a Pandas dataframe has extra labels of the rows and columns - called
+\emph{index} and \emph{columns}. These are metadata of a dataframe.
+
+Here they coincide with NumPy's indexing.
+
+\end{frame}
+\begin{frame}[fragile]{Dataframe: Index and Column Metadata}
+
+Index and Column Metadata gives a Pandas dataframe the possibility to label
+the data as known from classical tabel design
+
+\begin{python}
+AF.columns = ['C1','C2','C3']
+AF.index    = ['R1', 'R2']
+\end{python}
+\vfill
+This gives
+\begin{verbatim}
+     C1   C2   C3
+R1  1.0  2.0  3.0
+R2  4.0  5.0  6.0
+\end{verbatim}
+\vfill
+... and allows  indexing to construct subframes:
+\vfill
+\begin{minipage}{0.45\textwidth}
+\begin{python}
+AF.loc[['R1'],['C2']]
+\end{python}
+\end{minipage} \hfill
+returns \hfill
+\begin{minipage}{0.25\textwidth}
+\begin{verbatim}
+     C2
+R1  2.0
+\end{verbatim}
+\end{minipage}
+\end{frame}
+\begin{frame}[fragile]{Dataframe: Indexing}
+Indexing by row and column labels \pyth!loc!-method:
+\vfill
+\begin{minipage}{0.45\textwidth}
+\begin{python}
+AF.loc['R1', 'C2']     # returns 2.0
+\end{python}
+\end{minipage} \vfill
+while \vfill
+\begin{minipage}{0.45\textwidth}
+\begin{python}
+AF.loc[['R1'],['C2']]
+\end{python}
+\end{minipage} \hfill
+returns \hfill
+\begin{minipage}{0.25\textwidth}
+\begin{verbatim}
+     C2
+R1  2.0
+\end{verbatim}
+\end{minipage}
+\end{frame}
+\begin{frame}[fragile]{Indexing by row and column indexes \pyth!iloc!-method}
+\vfill
+\begin{minipage}{0.45\textwidth}
+\begin{python}
+AF.iloc[0,1]     # returns 2.0
+\end{python}
+\end{minipage} \vfill
+while \vfill
+\begin{minipage}{0.45\textwidth}
+\begin{python}
+AF.iloc[[0],[1]]
+\end{python}
+\end{minipage} \hfill
+returns \hfill
+\begin{minipage}{0.25\textwidth}
+\begin{verbatim}
+     C2
+R1   2.0
+\end{verbatim}
+\end{minipage}
+\end{frame}
+\begin{frame}[fragile]{Pandas Dataseries}
+The label of a column can be used as an attribute
+\begin{python}
+AF.C1
+\end{python}
+which refers to the entire column
+\begin{verbatim}
+R1    1.0
+R2    4.0
+Name: C1, dtype: float64
+\end{verbatim}
+\vfill
+This is a new Pandas object -- a Series object
+\begin{python}
+type(AF.C1) == pd.Series  # True
+\end{python}
+Note, a Pandas series has no column label. It is just a single column corresponding
+to a single type of measured data.
+\end{frame}
+\begin{frame}[fragile]{Dataframes: Subframes, Slices and Elements}
+Note, if \pyth!loc! (or \pyth!iloc!) is called with list arguments or slices  the result is
+a dataframe
+\begin{python}
+AF.loc['R1':,'C2':]  # or equivalently
+AF.loc[['R1','R2'], ['C2','C3']]
+\end{python}
+\vfill
+while calling with a pair of single labels just give an element of the dataframe
+\begin{python}
+AF.loc['R1','C2']  # returns 2.0
+\end{python}
+\vfill
+{\tiny Compare with indexing of arrays}
+\end{frame}
+\begin{frame}[fragile]{Datetime objects as indexes}
+It is very common that the index contains information about the date and the time of a given measurement
+as a string.
+
+In Sweden we use a format \texttt{yy-mm-dd hh:mm:ss} to report the time of a measurement as a string.
+
+\begin{python}
+date_index=['2020-01-19 11:45', '2020-01-20 02:14']
+AF.index=date_index
+\end{python}
+\vfill
+results in the dataframe
+\vfill
+\begin{verbatim}
+                  C1   C2   C3
+2020-01-19 11:45  1.0  2.0  3.0
+2020-01-20 02:14  4.0  5.0  6.0
+\end{verbatim}
+\end{frame}
+\begin{frame}[fragile]{Datetime objects as indexes \hfill (Cont.)}
+We often want to make simple arithmetic with date and time information for this end
+the list of strings has to be converted in a list of so-called \pyth!datetime! objects first
+\vfill
+\begin{python}
+date_index=pd.to_datetime(
+           ['2020-01-19 11:45', '2020-01-20 02:14']
+           )
+AF.index=date_index
+\end{python}
+\vfill
+This way we can easlily find out how much time passed between the measurements
+\pyth!AF.index[1]-AF.index[0]!.
+The result is a \pyth!timedelta! object displayed here as
+\begin{verbatim}
+Timedelta('0 days 14:29:00')
+\end{verbatim}
+\end{frame}
+\begin{frame}[fragile]{Creating a dataframe from imported data}
+A dataframe from solar data (File: \pyth!solarWatts.dat!)
+\end{frame}
+\begin{frame}[fragile]{Dataframe from a datafile}
+\begin{python}
+solarWatts = pd.read_csv("solarWatts.dat",
+                         sep=';',
+                         index_col='Date',
+                         parse_dates=[0],
+                         infer_datetime_format=True)
+\end{python}
+What do these arguments tell?
+The data is semicolon seperated, which column defines the index, which column contains dates, should dates converted from string to timestamp and how.
+\vfill
+A typical entry: \hfill \pyth!solarWatts.iloc[100]!\\
+The last date of the measurements: \hfill \pyth!solarWatts.iloc[-1]!
+\end{frame}
+\begin{frame}[fragile]{Merging Dataframes}
+Here we merge production data with electricity prices:
+\begin{python}
+# Creating dataframes from csv-files
+solarWatts = pd.read_csv("solarWatts.dat", ... )
+prices     = pd.read_csv("price.dat", ...)
+rates      = pd.read_csv("rates.dat", ...)
+\end{python}
+and
+\begin{python}
+# Merging dataframes
+solar_all=pd.merge(solarWatts, prices, how='outer', sort=True, on='Date')
+solar_all=pd.merge(solar_all, rates, how='outer', sort=True, on='Date')
+\end{python}
+\pyth!'outer'! tells that the union of the index entries is taken as a new index.
+\end{frame}
+\begin{frame}[fragile]{Missing data}
+In the example:\\ power is updated every minute, price is updated every hour, rate is updated every day\\
+\vfill
+This gives enties like:
+\begin{lstlisting}
+                        Watt      SEK  Euro_SEK
+Date
+2019-10-21 13:59:00  2650.0      NaN       NaN
+2019-10-21 14:00:00  1901.0  0.48725       NaN
+2019-10-21 14:01:00  1436.0      NaN       NaN
+2019-10-21 14:02:00  1040.0      NaN       NaN
+2019-10-21 14:03:00   714.0      NaN       NaN
+2019-10-21 14:04:00   498.0      NaN       NaN
+\end{lstlisting}
+What can be done? \\ Use frame methods like: \pyth!dropna!, \pyth!fillna!, \pyth!interpolate!
+\end{frame}
+\begin{frame}[fragile]{Missing data \hfill Cont.}
+We use here  \pyth!fillna!:
+\begin{python}
+solar_all=solar_all.fillna(method='pad',axis=0)
+\end{python}
+Note, this method is no \emph{inplace} operation, i.e. a new object is created.\\
+\vfill
+\begin{lstlisting}
+                       Watt      SEK  Euro_SEK
+Date
+2019-10-21 13:59:00  2650.0  0.47572   10.7311
+2019-10-21 14:00:00  1901.0  0.48725   10.7311
+2019-10-21 14:01:00  1436.0  0.48725   10.7311
+2019-10-21 14:02:00  1040.0  0.48725   10.7311
+2019-10-21 14:03:00   714.0  0.48725   10.7311
+2019-10-21 14:04:00   498.0  0.48725   10.7311
+\end{lstlisting}
+\end{frame}
+\begin{frame}[fragile]{Plotting dataframes}
+We demonstrate this by plotting the price variation along one day.
+\begin{python}
+solar_all.loc['2020-05-16'].plot(y='SEK')
+\end{python}
+\centerline{
+\includegraphics[width=.8\textheight]{SEK_plot1.png}}
+\end{frame}
+\end{document}

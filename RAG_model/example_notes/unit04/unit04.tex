@@ -1,0 +1,356 @@
+\documentclass[hyperref={pdfpagelabels=false},table]{beamer}
+
+\input{lec_common}
+\begin{document}
+
+\part{Unit 4: Functions}
+
+%\frame{\tableofcontents}
+
+
+\begin{frame}[fragile]{Functions in Mathematics}
+In Mathematics:\\
+A function is written as a map, that uniquely\\
+assigns an element $y$ from the range $R$
+to every element $x$ from the domain $D$.\\
+\vfill
+\[
+ f: x \mapsto y .
+\]
+$f$ is the function\\
+$x$ is its argument\\
+$y$ is its (return) value\\
+\vfill
+There can be several arguments of different type:
+\vfill
+Consider
+\[
+f(g,a,b) = \int_a^b g(x) \mathrm{d} x
+\]
+The arguments are not interchangable. Position matters.
+\end{frame}
+\begin{frame}[fragile]{Functions in Python}
+Definition of a function:
+\begin{python}
+def f(x1, x2, x3):
+    .....  # some computations
+    y = ... #
+    return y
+\end{python}
+Evaluation (call) of a function:
+\begin{python}
+f(17, 18, -2)
+f([1, 2, 3], {'Tol': 1.e-10}, 'ro')
+...
+\end{python}
+Wording:\\
+\pyth!x1, x2, x3! are called function parameters {\footnotesize (needed for the definition)}\\
+\pyth!17, 18, -2! are called arguments {\footnotesize (needed for the evaluation)}
+\end{frame}
+\begin{frame}[fragile]{Passing Arguments}
+Consider:
+\begin{python}
+def subtract(x1, x2):
+    return x1 - x2
+\end{python}
+\vfill
+Passing arguments by position:
+\begin{python}
+subtract(1, 2) # returns -1
+\end{python}
+Position matters.
+\vfill
+Passing arguments by keyword:
+\begin{python}
+subtract(x2=2, x1=1) # returns -1
+\end{python}
+Position doesn't matter.
+\end{frame}
+\begin{frame}[fragile]{Scope of variables I}
+Variables defined inside the function
+are said to belong to the function's \emph{scope}.\\
+
+They are unknown outside the function.
+\vfill
+\begin{minipage}[top]{0.3\textwidth}
+Definition:
+\begin{python}
+def mult2(x):
+    c = 2.
+    return c*x
+\end{python}
+\end{minipage}
+\hfill
+\begin{minipage}[top]{0.6\textwidth}
+Evaluation:
+\begin{python}
+mult2(20.)  # returns 40
+c    # returns NameError:
+     # 'c' not defined
+\end{python}
+\end{minipage}
+\end{frame}
+\begin{frame}[fragile]{Scope of variables II}
+Compare:\\
+\vfill
+\begin{minipage}[top]{0.4\textwidth}
+\pyth!a! is a parameter of the function
+\begin{python}
+def multiply(x, a):
+    return a*x
+\end{python}
+\end{minipage}
+\hfill
+\begin{minipage}[top]{0.4\textwidth}
+\pyth!a! is referenced from outside the function's \emph{scope}:
+\begin{python}
+a = 3
+def multiply(x):
+    return a*x
+\end{python}
+\end{minipage}
+\end{frame}
+\begin{frame}[fragile]{Local variables}
+Similarly, immutable variables are copied when calling a function.\\
+You cannot change an input variable by changing a local variable like this:
+\begin{python}
+a = 3
+def f(x):
+    x = 2
+    return x
+print(f(a)) # 2
+print(a)    # 3
+\end{python}
+\emph{However}, this \emph{can} be done for mutable variables like lists, dictionaries, etc.\\
+As a principle, \emph{never} change input variables within a function.
+\end{frame}
+\begin{frame}[fragile]{Default Arguments}
+{\footnotesize default (eng) = standard (sv)}\ \\
+\vfill
+\begin{minipage}[top]{0.4\textwidth}
+The standard way ...
+\begin{python}
+def mult(x, c):
+    return c*x
+\end{python}
+a typical call
+\begin{python}
+y=mult(2., 13.)
+# returns 26
+y=mult(c=13., x=2.)
+# returns 26
+\end{python}
+
+\end{minipage}\hfill
+\begin{minipage}[top]{0.4\textwidth}
+... now with defaults
+\begin{python}
+def mult(x, c=1.0):
+    return c*x
+\end{python}
+possible calls
+\begin{python}
+y=mult(2., 13.)
+# returns 26
+y=mult(2.)
+# returns 2
+\end{python}
+\end{minipage}\\
+\vfill
+In the definition of the function mandatory parameters \emph{must}
+\emph{precede} optional parameters (those with default values).\\
+Why?
+\end{frame}
+\begin{frame}[fragile]{Arguments, Parameters -- Summary}
+Make sure that you understood the difference
+\begin{itemize}
+\item between arguments and parameters
+\item between function definition and function evaluation (call)
+\item between positional arguments and keyword arguments
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Docstrings}
+All functions (and everything else) should be documented
+carefully:\\
+\vfill
+A docstring is the leading comment in a function (or class):\\ \vfill
+\begin{python}
+def newton(f, x0):
+    """
+    Newton's method for computing a zero of a function
+    on input:
+    f  (function) given function f(x)
+    x0 (float) initial guess
+    on return:
+    y  (float) the approximated zero of f
+    """
+    ...
+\end{python}
+\pyth!help(newton)! in Python or \pyth!newton?! in IPython
+displays the docstring as a help text.
+\end{frame}
+\begin{frame}[fragile]{Unpacking Arguments }
+\emph{Positional arguments} remind us of \emph{lists} \\
+\emph{Keyword arguments} remind us of \emph{dictionaries}\\
+\vfill
+\begin{python}
+data = [[1,2], [3,4]]
+style = {'linewidth':3, 'marker':'o', 'color':'green'}
+\end{python}
+\vfill
+Star operators unpack these to form a valid parameter list
+\begin{python}
+plot(*data, **style)
+\end{python}
+\vfill
+$\ast$ unpacks a list to positional arguments\\
+$\ast\ast$ unpacks dictionaries to keyword arguments
+\end{frame}
+\begin{frame}[fragile]{Passing (tunneling) arguments}
+ Also in the definition of functions you might find these constructs.
+This is often used to pass arguments through a function
+\begin{python}
+def outer(f, x, *args, **keywords):
+   return f(x, *args, **keywords)
+
+def inner(x, y, z, u):
+   print(y, z)
+   print(u)
+   return x**2
+\end{python}
+\begin{minipage}[top]{.45\textwidth}
+ A call
+\begin{python}
+L=[1, 2]
+D={'u':15}
+outer(inner, 3, *L, **D)
+\end{python}
+\end{minipage} \hfill
+\begin{minipage}[top]{.5\textwidth}
+Equivalently:
+\begin{python}
+outer(inner, 3, 1, 2, u=15)
+\end{python}
+\end{minipage}\\
+\vfill
+
+Note, the function \pyth!outer! cannot know how many arguments it needs
+to provide a full parameter list to the ``inner'' function \pyth!f!.
+\end{frame}
+\begin{frame}[fragile]{Return}
+The \pyth!return! statement returns \emph{a single} object!\\
+\vfill
+\begin{python}
+def my_func(x):
+    return 1,2,3,4,5,6
+\end{python}
+What is the object that is returned here? Which type does it have? \\
+{\footnotesize (see Unit 3)}\\
+\vfill
+Statements after the return statement are ignored:\\[0.5cm]
+\begin{minipage}[top]{0.4\textwidth}
+\begin{python}
+def my_func(x):
+    return 1,2,3
+    z = 25 # ignored
+\end{python}
+\end{minipage}
+\hfill
+\begin{minipage}[top]{0.4\textwidth}
+\begin{python}
+def my_func(x):
+   if x > 0:
+      return 1
+   else:
+      return -1
+   z = 25 # ignored
+\end{python}
+\end{minipage}
+\end{frame}
+\begin{frame}[fragile]{No Return}
+A function \emph{without} a \pyth!return! statement
+returns \pyth!None!:\\
+\vfill
+\begin{python}
+def my_func(x):
+    z = 2*x
+
+a = my_func(10.)
+
+type(a) # <type 'NoneType'>
+a == None # true
+\end{python}
+\vfill
+\end{frame}
+\begin{frame}[fragile]{Functions are objects}
+Functions are objects, they can be deleted, reassigned, copied ... \\
+\vfill
+\begin{python}
+def square(x):
+  """Return the square of `x`"""
+  return x**2
+square(4) # 16
+sq = square # now sq is the same as square
+sq(4) # 16
+del square # `square` doesn't exist anymore
+print(newton(sq, .2)) # passing as argument
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Partial Application}
+{\footnotesize Partial application = closures}\ \\
+\vfill
+In mathematics we often ``freeze'' a parameter of a function:
+\[
+ f_{\omega}(x)=f(x,\omega)=\sin(\omega x)
+\]
+\vfill
+In Python there are many possibilities to do this, here is one ...
+\begin{python}
+def make_sin(omega):
+    def f(x):
+        return sin(omega*x)
+    return f
+
+fomega = make_sin(omega)
+
+\end{python}
+In order to understand this solution, recall
+\begin{itemize}
+\item the scope of a variable and references to variables out of scope
+\item functions are objects
+\end{itemize}
+\end{frame}
+\begin{frame}[fragile]{Anonymous Functions: the \pyth{lambda} keyword}
+With $\lambda$-functions one has a handy tool for
+making one-line function definitions:
+\begin{python}
+f = lambda x: 3.*x**2 + 2.*x + 0.5
+f(3)  # returns 33.5
+g = lambda x,y: 3.*x-2.*y
+g(1,1) # returns 1.0
+\end{python}
+\vfill
+Example for a common application, compute $\int_0^1 x^2 + 5 \, \mathrm{d} x$:\\
+\vfill
+\begin{python}
+import scipy.integrate as si
+si.quad(lambda x: x**2+5,0,1)
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Partial Applications and $\lambda$}
+\[
+ f_{\omega}(x)=f(x,\omega)=\sin(\omega x)
+\]
+\vfill
+ .... now simply becomes\\
+\vfill
+\begin{python}
+omega = 3.
+fomega = lambda x: sin(omega*x)
+fomega(1.) # returns 0.14112...
+\end{python}
+
+\end{frame}
+
+\end{document}

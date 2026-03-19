@@ -1,0 +1,529 @@
+\documentclass[hyperref={pdfpagelabels=false},table, handout]{beamer}
+
+\input{lec_common}
+\begin{document}
+\part{Unit 2:Strings, Booleans, Functions and Plot.}
+
+
+\begin{frame}[fragile]{In this lecture}
+
+\begin{itemize}
+  \item What is Scientific Computing
+  \item More about lists and operators
+  \item Calculating sums
+  \item Conditional statements
+  \item More about for loops
+  \item String formatting
+  \item Functions
+  \item Modules
+  \item More about plots
+  \item Fixed point iterations
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{Scientific Computing 1/2}
+
+  \small
+
+  \structure{Computational science}, also known as \structure{scientific computing} or \structure{scientific computation} (SC),
+  is a rapidly growing field that uses advanced computing capabilities to understand and solve complex problems.
+  It is an area of science which spans many disciplines, but at its core,
+  it involves the development of models and simulations to understand natural systems (\url{en.wikipedia.org/wiki/Computational_science}). \\
+
+  \vskip 5pt
+
+  \begin{itemize}
+    \item \structure{Algorithms} (numerical and non-numerical): mathematical models, computational models, and computer simulations developed to solve science (e.g., biological, physical, and social), engineering, and humanities problems
+    \item \structure{Computer hardware}: that develops and optimizes the advanced system hardware, firmware, networking, and data management components needed to solve computationally demanding problems
+    \item \structure{The computing infrastructure} that supports both the science and engineering problem solving and the developmental computer and information science.  \\
+  \end{itemize}
+
+  \alert{Note}: \\
+  Scientific Computing (Computational Science) $\neq$ Computer Science
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{Scientific Computing 2/2}
+
+Because we want to solve large (many unknowns) problems with computer simulations
+we need fast algorithms but also fast and efficient software.
+This is the main difference to other areas of programming. \\
+
+\vskip 10pt
+
+We often have to make sacrifices in design and code style in order to achieve performance.
+This leads to programs with millions of lines of code that are difficult to understand and manage.
+
+\vskip 10pt
+  Example: The Community Earth System Model (\url{https://www.cesm.ucar.edu})
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Revision -- lists}
+
+  Given a list \pyth{L} you can use the function \pyth{len(L)} to find the length of the list.
+
+\begin{python}
+  L = [4, 9, -1, 2]
+  print("The length is", len(L)) # The length is 4
+\end{python}
+
+  \pause
+
+  \vskip 5pt
+
+  You can also use the method \pyth{append} by using dot notation after the name of the list.
+
+\begin{python}
+  L.append( 11 )
+  print("L = ", L) # L = [4, 9, -1, 2, 11]
+\end{python}
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Some more functions}
+
+ Given a list \pyth{L} you can also use:
+
+  \begin{itemize}
+    \item \pyth{sum( L )}
+    \item \pyth{max( L )}
+    \item \pyth{min( L )}
+  \end{itemize}
+
+  \pause
+
+\begin{python}
+  L = [4, 9, -1, 2]
+  print("The sum is", sum(L)) # The sum is 14
+  print("The max is", max(L)) # The max is 9
+  print("The min is", min(L)) # The min is -1
+\end{python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\frametitle{Even more functions}
+
+ Given a list \pyth{L} you can also use:
+
+  \begin{itemize}
+    \item \pyth{L.reverse()}
+    \item \pyth{L.sort()}
+    \item \pyth{L.sort(reverse=True|False, key=myFunc)}
+  \end{itemize}
+
+  \pause
+
+\begin{python}
+  L = [4, 9, -1, 2]
+  print("L = ", L)  # L = [4, 9, -1, 2]
+  L.reverse()
+  print("L = ", L)  # L = [2, -1, 9, 4]
+  L.sort()
+  print("L = ", L)  # L = [-1, 2, 4, 9]
+\end{python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Programming example}
+\vfill
+How do we calculate
+\[
+\sum_{i=0}^n i \ ?
+\]
+
+\pause
+
+  Discussion (5min).
+
+\vskip 10pt
+
+\pause
+
+\begin{python}
+  # for loop
+  s = 0
+  for i in range(0,101): # n = 100
+      s += i
+  print( s ) # 5050
+\end{python}
+
+\pause
+
+\begin{python}
+  # list comprehension
+  L = [i for i in range(0,101)]
+  print( sum(L) ) # 5050
+\end{python}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Conditional Expressions}
+\book{20, 22, 37}
+\begin{defblock}A \alert{conditional expression} is an expression that may have the \alert{Boolean} value \alert{True} or \alert{False}.
+\end{defblock}
+\pause
+Some common operators that yield conditional expressions are:
+\begin{itemize}
+\item \pyth{==}, \pyth{!=}
+\item \pyth{<}, \pyth{>}, \pyth{<=}, \pyth{>=}
+\item One combines different Boolean values with \pyth{or} and \pyth{and}
+\item \pyth{not} gives the \alert{logical negation} of the expression that follows
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Conditional Expression Examples}
+\begin{example}
+\begin{python}
+2 >= 4  # False
+2 < 3 < 4 # True
+2 < 3 and 3 < 2 # False
+2 != 3 < 4 or False # True
+2 <= 2 and 2 >= 2 # True
+not 2 == 3 # True
+not False or True and False # True!
+\end{python}
+\end{example}
+Note in the last example the priority rules when using  \pyth!not!, \pyth!and!, and \pyth!or!.\\
+They can be compared to addition ($\rightarrow$ \pyth!or!), multiplication, ($\rightarrow$~\pyth!and!),
+and sign change ($\rightarrow$ \pyth!not!) in classical arithmetics.
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Conditional statements}
+\begin{alertblock}{\pyth!If! statement}
+A conditional statement delimits a \alert{block} that will be executed if the condition is true. An \alert{optional} block, started with the keyword \pyth{else} will be executed if the condition is not fulfilled.
+\end{alertblock}
+\begin{example}%{Example: Absolute Value}
+We print the absolute value of $x$:\\[0.5cm]
+\begin{minipage}[c]{0.4\textwidth}
+Mathematics:\\
+\[
+|x| = \left \{
+\begin{aligned}
+ x & \text{  if } &x \ge 0 \\
+-x & \text{  else } &
+\end{aligned}
+\right .
+\]
+\vfill
+\end{minipage}
+\hfill $\Longrightarrow$ \hfill
+\begin{minipage}[c]{0.4\textwidth}
+Python:
+\begin{python}
+x = ...
+if x >= 0:
+  print(x)
+else:
+  print(-x)
+\end{python}
+\end{minipage}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]{Error messages}
+By using Boolean expressions you can check for potential errors:
+\begin{python}
+denom = ...
+num = 3
+if not denom == 0:
+   frac = num / denom
+else:
+   raise ZeroDivisionError("Don't divide by zero!")
+\end{python}
+
+The string in the parenthesis is up to the programmer. \\
+The error type has to be predefined. \\ \hfill {\footnotesize See later chapter}.
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{The full \pyth!for! statement: \texttt{break}}
+\book{21, 22}
+
+%The for statement has two important keywords: \pyth{break} and \pyth{else}.
+%\begin{itemize}[<+->]
+%\item
+\pyth!break! gets out of the for loop even if the list we are iterating is not exhausted.
+\begin{python}
+for x in x_values:
+  if x > threshold:
+    break
+  print(x)
+\end{python}
+%\item
+\end{frame}
+\begin{frame}[fragile]{The full for statement: \pyth!else!}
+ \alert{else} checks whether the for loop was \emph{broken} with the \pyth!break! keyword.
+\begin{python}
+for x in x_values:
+  if x > threshold:
+    break
+else:
+  print("all the x are below the threshold")
+\end{python}
+If we \emph{did not break} the \pyth{else}-block is executed.
+%\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Basic string formatting}
+\book{43}
+\begin{itemize}
+\item Using keywords:
+\begin{python}
+"I'm a {something}.".format(something="string")
+# "I'm a string."
+"I'm a {something}.".format(something=10)
+# "I'm a 10."
+\end{python}
+
+\item Using positional arguments:
+\begin{python}
+"Two strings, {} and {}.".format('a', 'b')
+# 'Two strings, a and b.'
+"Pi = {0} and e = {1}.".format(pi, e)
+# 'Pi = 3.14159265359 and e = 2.71828182846.'
+\end{python}
+
+\item Numbers can be formatted:
+\begin{python}
+quantity = 33.45
+"{0:f}".format(quantity)    # 33.450000
+"{0:1.1f}".format(quantity) # 33.5
+"{0:.2e}".format(quantity)  # 3.35e+01
+\end{python}
+\end{itemize}
+
+\end{frame}
+\begin{frame}[fragile]{Basic string formatting \hfill (Cont.)}
+A way to work with string formatting is to construct a string
+as a template and then applying the format method in a second step:
+\vfill
+\begin{python}
+myname="I'm {name}. I work as a {profession}."
+print(myname.format(name='Erika', profession='manager')
+print(myname.format(name='Carl-Gustaf', profession='king')
+\end{python}
+\vfill
+
+\end{frame}
+\begin{frame}[fragile]{f-strings}
+An easy and direct alternative is the use of f-strings:
+\vfill
+\begin{python}
+result = 2.54
+p=(f'The pressure of the tire is {result} bar\n'
+   f'which is {result-2.5:1.2f} bar too much!')
+print(p)
+\end{python}
+\vfill
+This results in:
+\begin{verbatim}
+The pressure of the tire is 2.54 bar
+which is 0.04 bar too much!
+\end{verbatim}
+{\tiny Note, how calculations and formatting can be done within an f-string.\\ Note also the implicit continuation line forced by the use of the parantheses.}
+\end{frame}
+\begin{frame}[fragile]{Old string formatting (just for reference)}
+Older versions of Python use the following syntax to format strings. It works in newer versions too.
+\begin{itemize}
+\item for strings:
+\begin{python}
+course_code = "NUMA21"
+print("This course's name is %s" % course_code)
+# This course's name is NUMA21
+\end{python}
+\item for integers:
+\begin{python}
+nb_students = 16
+print("There are %d students" % nb_students)
+# There are 16 students
+\end{python}
+\item for reals:
+\begin{python}
+average_grade = 3.4
+print("Average grade: %f" % average_grade)
+# Average grade: 3.400000
+\end{python}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Basics on Functions}
+\book{23}
+Consider the following mathematical \alert{function}:
+\[x \mapsto f(x) := 2x + 1\]
+The Python equivalent is:
+\begin{python}
+def f(x):
+  return 2*x + 1
+\end{python}
+\begin{itemize}
+\item the keyword \pyth{def} tells Python we are defining a function
+\item \texttt{f} is the \alert{name} of the function
+\item \texttt{x} is the \alert{parameter}, or \alert{input} of the function
+\item what follows \pyth!return! is called the \alert{output} of the function
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Calling a Function}
+Once the following function is defined:
+\begin{python}
+def f(x):
+  return 2*x + 1
+\end{python}
+it may now be called using:
+\begin{python}
+f(2) # 5
+f(1) # 3
+# etc.
+\end{python}
+
+Note, the \alert{parameter} $x$ is replaced by the \alert{argument} $2$.
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Writing scripts (Book p. 15)}
+
+Collect a sequence commands in a file with its name ending in \alert{.py}, e.g.\ \pyth{smartscript.py}
+\begin{python}
+def f(x):
+  return 2*x + 1
+
+z = []
+for x in range(10):
+  if f(x) > pi:
+    z.append(x)
+  else:
+    z.append(-1)
+print(z)
+\end{python}
+
+\pause
+
+From IPython:
+\begin{python}
+run smartscript.py # [-1, -1, 2, 3, 4, 5, 6, 7, 8, 9]
+\end{python}
+
+\pause
+
+From command prompt (i.e. in the terminal window)
+\begin{python}
+python smartscript.py
+\end{python}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Example - collecting functions}
+\book{24}
+Create a \alert{module} by collecting functions into a single file, e.g.\ \pyth{smartfunctions.py} as:
+\begin{python}
+def g(x):
+  return x**2 + 4 * x - 5
+
+def h(x):
+  return 1/f(x)
+
+def f(x):
+  return 2 * x + 1
+\end{python}
+\begin{itemize}
+\item These functions can now be used by any external script or directly in the IPython environment.
+\item Functions within the module can depend on each other.
+\item Grouping functions with a common theme or purpose gives modules that can be shared and used by others.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Using modules \hspace*{\fill}}
+\book{25}
+Modules need to be imported.
+\begin{python}
+import smartfunctions
+print(smartfunctions.f(2)) # 5
+
+from smartfunctions import g  #import just only g
+print(g(1)) # 0
+
+from smartfunctions import * #import all
+print(h(2) * f(2)) # 1.0
+\end{python}
+{\small Note the use of the namespace \pyth{smartfunctions}!}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Plot}
+\book{123}
+\begin{itemize}
+\item
+You have already used the command \pyth{plot}. It needs a list of $x$ values and a list of $y$ values. If a single list, $y$ is given, the list \pyth{list(range(len(y)))} is assumed as $x$ values.
+\item You may use the keyword argument \pyth{label} to give your curves a name, and then show them using \pyth{legend}.
+\begin{python}
+x_vals = [.2*n for n in range(20)]
+y1 = [sin(.3*x) for x in x_vals]
+y2 = [sin(2*x) for x in x_vals]
+plot(x_vals ,y1, label='0.3')
+plot(x_vals, y2, label='2')
+legend()
+show() # not always needed.
+\end{python}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Plot (Cont.)}
+Here comes the plot with a legend.
+\begin{center}
+ \includegraphics[height=3cm]{legend_ex.pdf}
+ % legend_ex.pdf: 586x442 pixel, 72dpi, 20.67x15.59 cm, bb=0 0 586 442
+\end{center}
+Here is an example with more keywords:
+\begin{python}
+ plot(x_vals,y2,
+      color='green',
+      linestyle='dashed',
+      marker='o',
+      markerfacecolor='blue',
+      markersize=12,linewidth=6)
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Plot (Cont.)}
+... and here the resulting graph:
+\vfill
+\begin{center}
+ \includegraphics[height=6cm]{legend_ex2.pdf}
+ % legend_ex.pdf: 586x442 pixel, 72dpi, 20.67x15.59 cm, bb=0 0 586 442
+\end{center}
+\vfill
+\end{frame}
+
+
+\end{document}

@@ -1,0 +1,328 @@
+\documentclass[hyperref={pdfpagelabels=false},table,handout]{beamer}
+
+\input{lec_common}
+\begin{document}
+
+\part{Unit 3: More on Lists and other Container Types}
+
+
+\begin{frame}[fragile]{Creating sublists}
+\begin{block}{Slicing -- \pyth!L[i:j]!}
+\alert{Slicing} a list between index $i$ and $j$ is forming a new list by taking
+elements with indices starting at $i$ and ending \emph{just before} $j$.
+\end{block}
+
+\begin{block}{Alternatively ...}
+\pyth!L[i:j]! means: create a list by removing the first
+$i$ elements from $L$  and keeping the next $j-i$ elements (for $j > i \ge 0 $)
+and removing the rest.
+\end{block}
+\vfill
+\begin{example}
+\begin{python}
+L = ['C', 'l', 'o', 'u', 'd']
+L[1:4] # remove one element and take three from there:
+# ['l', 'o', 'u']
+\end{python}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]{Partial slicing}
+One may omit the first or last bound of the slicing:
+\begin{python}
+L = ['C', 'l', 'o', 'u', 'd']
+L[1:] # ['l', 'o', 'u', 'd']
+L[:3] # ['C', 'l', 'o']
+L[-2:] # ['u', 'd']    # negative indexing !
+L[:-2] # ['C', 'l', 'o']
+L[:] # the entire list
+\end{python}
+\vfill
+\begin{block}{Mathematical Analogy}
+This is similar to half lines in $\mathbb{R}$:
+$[-\infty,a)$ means: take all numbers strictly lower than $a$,
+cf.  syntax of  \pyth!L[:j]!.
+\end{block}
+Let's sum it up
+\begin{itemize}
+\item \pyth!L[i:]! take all elements \emph{except} the $i$ first ones
+\item \pyth!L[:i]!  take the $i$ first elements
+\item \pyth!L[-i:]!  take the last $i$ elements
+\item \pyth!L[:-i]! to take all elements \emph{except} the $i$ last ones
+\end{itemize}
+\end{frame}
+
+%\tikzstyle{filled}=[fill=green!10]
+%\tikzstyle{empty}=[fill=red!80]
+\tikzstyle{filled}=[fill=red!80]
+\tikzstyle{empty}=[fill=green!10]
+
+\begin{frame}[fragile]{Examples}
+\begin{itemize}
+\item \pyth!L[2:]! \hfill
+\begin{tikzpicture}
+\matrix[nodes={draw,style=filled},minimum size=0.5cm,ampersand replacement=\&]
+{
+\node[style=empty]{0} ; \& \node[style=empty]{1}; \& \node{2};  \& \node{3}; \& \node{$\cdots$}; \& \node{-3}; \& \node{-2}; \& \node{-1}; \\
+};\end{tikzpicture}
+\item \pyth!L[:2]! \hfill
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= 0.5cm,ampersand replacement=\&]
+{
+\node[style=filled]{0} ; \& \node[style=filled]{1}; \& \node{2};  \& \node{3}; \& \node{$\cdots$}; \& \node{-3}; \& \node{-2}; \& \node{-1}; \\
+};
+\end{tikzpicture}
+\item \pyth!L[:-2]! \hfill
+\begin{tikzpicture}
+\matrix[nodes={draw,style=filled},minimum size= 0.5cm,ampersand replacement=\&]
+{
+\node{0} ; \& \node{1}; \& \node{2};  \& \node{3}; \& \node{$\cdots$}; \& \node{-3}; \& \node[style=empty]{-2}; \& \node[style=empty]{-1}; \\
+};
+\end{tikzpicture}
+\item \pyth!L[-2:]! \hfill
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= 0.5cm,ampersand replacement=\&]
+{
+\node{0} ; \& \node{1}; \& \node{2};  \& \node{3}; \& \node{$\cdots$}; \& \node{-3}; \& \node[style=filled]{-2}; \& \node[style=filled]{-1}; \\
+};
+\end{tikzpicture}
+\item \pyth!L[2:-1]! \hfill
+\begin{tikzpicture}
+\matrix[nodes={draw,style=filled},minimum size= 0.5cm,ampersand replacement=\&]
+{
+\node[style=empty]{0}; \& \node [style=empty]{1}; \& \node{2};  \& \node{3}; \& \node{$\cdots$}; \& \node{-3}; \& \node{-2}; \& \node [style=empty]{-1}; \\
+};
+\end{tikzpicture}
+\item \pyth!L[2:5]! \hfill
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= 0.5cm,ampersand replacement=\&]
+{
+\node{0}; \& \node{1}; \& \node[style=filled]{2};  \& \node[style=filled]{3}; \& \node[style=filled]{4}; \& \node{5}; \& \node{$\cdots$}; \& \node{-1}; \\
+};
+\end{tikzpicture}
+\item \pyth!L[-4:-1]! \hfill
+\begin{tikzpicture}
+\matrix[nodes={draw,style=empty},minimum size= 0.5cm,ampersand replacement=\&]
+{
+\node{0}; \& \node{1}; \& \node{$\cdots$};  \& \node{-5}; \& \node[style=filled]{-4}; \& \node [style=filled]{-3}; \& \node [style=filled]{-2}; \& \node{-1}; \\
+};
+\end{tikzpicture}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Dictionaries}
+A dictionary is an unordered structure of (key, value) pairs.
+It is similar to a list but the the objects are accessed by \alert{keys} instead of \alert{index}.
+
+\vfill
+
+One indicates dictionaries by square brackets:
+
+\begin{python}
+homework = {'Anna': True, 'Kerstin': False}
+
+homework['Anna'] # True
+# changing a value:
+homework['Kerstin'] = True
+# deleting an item
+del homework['Anna']
+\end{python}
+\vfill
+\alert{Note:} Any \emph{immutable} (unchangable) object can be used as a key, e.g. strings, numbers, Booleans, etc. are fine, but not lists.
+\vfill
+
+\end{frame}
+
+\begin{frame}[fragile]{Looping through Dictionaries}
+A dictionary is an object with the following useful mehods:\\
+\vfill
+ \hfill \pyth!keys!, \pyth!items!, \pyth!values! \hfill \,
+\vfill
+By default a dictionary is considered as a list of \alert{keys}:
+\begin{python}
+for key in homework:  # or homework.keys()
+  print(f'{k} {homework[key]}')
+\end{python}
+
+\pause
+One may also use \pyth!items! to loop through keys and values:
+\begin{python}
+for key, value in homework.items():
+  print('{key} {value}')
+\end{python}
+
+\pause
+You can also print just the values by using the \pyth!values! method:
+\begin{python}
+for value in homework.values():
+  print('{value}')
+\end{python}
+
+\end{frame}
+
+\begin{frame}[fragile]{Dictionaries in this course}
+Dictionaries are mainly used for
+\vfill
+\begin{itemize}
+\item providing functions with arguments in a compact way (see Unit 4).
+\item to collect options of a method:\\ \pyth!{'tol':1.e-3,'step size': 0.1, 'maxit':1000}!
+\end{itemize}
+\vfill
+
+\end{frame}
+
+\begin{frame}[fragile]{Sets}
+Sets are containers which mimic sets in their mathematical sense:
+\begin{definition}
+A \alert{set} is a collection of well defined and distinct objects, considered as an object in its own right.
+{\footnotesize (Wikipedia)}
+\end{definition}
+\vfill
+\begin{python}
+fruitbasket = set(['apple', 'pear', 'banana'])
+\end{python}
+\vfill
+The most important operation is \pyth!in!, meaning $\in$ (is element of):
+\begin{python}
+'plum' in fruitbasket  # returns False
+'pear' in fruitbasket  # returns True
+\end{python}
+\end{frame}
+
+\begin{frame}[fragile]{Operations on Sets}
+Operations on sets are $A \cap B, A \cup B$ and $A / B$ (intersection, union and relative complement):
+\begin{python}
+fruitbasket = set(['apple', 'pear', 'banana'])
+rotten = set(['pear'])
+exotic = set(['mango', 'kiwi'])
+emptyset = set([])        # the empty set
+# Are all fruits edible (non-rotten)?
+emptyset == fruitbasket.intersection(rotten)
+# Add some diversity
+extendedbasket = fruitbasket.union(exotic)
+# The edible fruits
+goodfruits = fruitbasket - rotten # rel complement
+\end{python}
+The following syntax can also be used:
+\begin{python}
+  exotic = {'mango', 'kiwi'}
+\end{python}
+Compare with dictionaries: \pyth!{'a':'mango', 'b':'kiwi'}!
+\end{frame}
+
+\begin{frame}[fragile]{No duplicate elements}
+``...distinct objects ...'' (see mathematical definition)\\
+\vfill
+This is reflected in Python by
+\begin{python}
+set({'apple', 'apple', 'pear'})
+ == set({'apple', 'pear'}) # True
+\end{python}
+\vfill
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Tuples}
+\begin{defblock}
+A \alert{tuple} is an \alert{immutable} list. Immutable means that it cannot be modified.
+\end{defblock}
+
+\begin{example}
+\begin{python}
+my_tuple = (1, 2, 3) # our first tuple!
+my_tuple = 1, 2, 3   # parentheses not required
+len(my_tuple) # 3, same method as for lists
+
+my_tuple[0] = 'a' # error! tuples are immutable
+
+singleton = 1, # note the comma
+singleton = (1,) # preferred for readability
+len(singleton) # 1
+\end{python}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]{Packing and unpacking}
+One may assign several variables at once by \alert{unpacking} a list or tuple:
+\begin{python}
+a, b = 0, 1 # a gets 0 and b gets 1
+a, b = [0, 1] # exactly the same effect
+(a, b) = 0, 1 # same
+[a,b] = [0,1] # same thing for lists
+\end{python}
+\pause
+\begin{block}{The swapping trick!}
+Use packing and unpacking to \alert{swap} the contents of two variables.
+\begin{python}
+a, b = b, a
+\end{python}
+\end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]{Returning Multiple Values}
+A function may return several values:
+\begin{python}
+def argmin(L): # return the minimum and index
+  ...
+  return minimum, minimum_index     # a tuple
+
+min_info = argmin([1, 2, 0])
+min_info[0] # 0
+min_info[1] # 2
+# often unpacking is used directly
+m, i = argmin([1, 2, 0]) # m is 0, i is 2
+\end{python}
+\end{frame}
+
+\begin{frame}[fragile]{A final word on tuples}
+\begin{itemize}[<+->]
+\item Tuples are \emph{nothing else} than immutable lists
+\item In most cases lists may be used instead of tuples
+\item The parentheses free notation is nice but \alert{dangerous},
+you should \alert{use parentheses when you are not sure}:
+\begin{python}
+a, b = b, a # the swap trick, equivalent to:
+(a, b) = (b, a)
+# but
+1, 2 == 3, 4 # returns (1, False, 4)
+(1, 2) == (3, 4) # returns False
+\end{python}
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Conversions}
+Containers can be converted to other container types:
+\vfill
+\begin{tabular}{@{\extracolsep{.5cm}} lll }
+  From & To & Command \\
+  \hline\\
+    List & Tuple & {\pyth!tuple([1, 2, 3])!} \\[1em]
+    Tuple & List & {\pyth!list((1, 2, 3))!} \\[1em]
+    List, Tuple & Set & {\pyth!set([1,2,3])!, \pyth!set((1,2,3))!} \\[1em]
+    Set & List       & {\pyth!list({1,2,3})!} \\[1em]
+    Dictionary & List & {\pyth!{'a':4}.values()!} \\[1em]
+    List & Dictionary & {--} \\[1em]
+  \end{tabular}
+\end{frame}
+
+\begin{frame}[fragile]{Summary and Overview}
+\vfill
+\begin{tabular}{|c||c|c|c|c|} \hline
+Type & Access & Order & Duplicate Values & Mutability \\ \hline \hline
+List & index & yes & yes & yes \\ \hline
+Tuple & index & yes & yes & no \\ \hline
+Dictionary & key & no & yes & yes \\ \hline
+Set & no & no & no & yes \\ \hline
+\end{tabular}
+\vfill
+\end{frame}
+
+\end{document}

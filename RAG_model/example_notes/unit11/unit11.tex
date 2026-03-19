@@ -1,0 +1,94 @@
+\documentclass[hyperref={pdfpagelabels=false},table]{beamer}
+
+\input{lec_common}
+
+\begin{document}
+
+%\frame{\tableofcontents}
+\part{Unit 11: Symbolic Computations.}
+\begin{frame}[fragile]{What are symbolic computations?}
+Let us the definite integral
+\[
+\int_0^4 \frac{1}{x^2+x+1}\, \mathrm{d} x
+\]
+
+Primitive function
+
+\[
+\frac{2}{\sqrt{3}} \arctan \left ( \frac{2 x +1}{\sqrt{3}} \right )
+\]
+
+Solution
+\[
+\int_0^4 \frac{1}{x^2+x+1}\, \mathrm{d} x =
+\frac{\sqrt{3}}{9} \left(- \pi + 6 \arctan\left (3 \sqrt{3} \right )\right)
+\]
+
+Evaluation
+
+\[
+\int_0^4 \frac{1}{x^2+x+1}\, \mathrm{d} x \approx  0.9896614396123
+\]
+\end{frame}
+\begin{frame}[fragile]{Numeric computation}
+\vfill
+\begin{python}
+from scipy.integrate import quad
+quad(lambda x : 1/(x**2+x+1),a=0, b=4)
+\end{python}
+\vfill
+gives $0.9896614396122965$
+\vfill
+error bound $1.1735663442283496\,\mathrm{e}-08$.
+\vfill
+\end{frame}
+\begin{frame}{}
+ \includegraphics[width=\textwidth]{symbolic}
+\end{frame}
+
+\begin{frame}[fragile]{This example in Sympy}
+
+Initialization
+
+\begin{python}
+from sympy import *
+init_printing()
+\end{python}
+
+Creating symbols
+
+\begin{python}
+x = symbols('x')
+f = Lambda(x, 1/(x**2 + x + 1))
+\end{python}
+
+\end{frame}
+
+\begin{frame}[fragile]{This example in Sympy (Cont.)}
+
+The primitive function
+
+\begin{python}
+pf = Lambda(x, integrate(f(x),x))
+\end{python}
+
+and its evaluation
+
+\begin{python}
+pf(4) - pf(0)
+\end{python}
+after simplification with \pyth!simplify!
+\[
+\frac{\sqrt{3}}{9} \left(- \pi + 6 \arctan\left (3 \sqrt{3} \right )\right).
+\]
+\end{frame}
+
+\begin{frame}[fragile]{This example in Sympy (Cont.)}
+
+Final evaluation
+
+\begin{python}
+(pf(4)-pf(0)).evalf() # returns 0.9896614396123
+\end{python}
+\end{frame}
+\end{document}

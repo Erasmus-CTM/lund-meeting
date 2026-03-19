@@ -1,0 +1,145 @@
+<!doctype html>
+
+<!-- THIS IS A DEMO/SANDBOX PAGE FOR DEVELOPMENT -->
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>App demo</title>
+  </head>
+  <body>
+    <script type="module" src="/src/main.ts"></script>
+    <main id="app">
+      <!-- GLOBAL OPTIONS -->
+      <script type="application/json" id="global-options">
+        {
+          "prompts": {
+            "system": "You are an AI Assistant, specialized in python programming. You give concise answers, without asking further questions.",
+            "choice": "Give a concise hint on the following multiple choice question: {{QUESTION}}. The options are: {{OPTIONS}}. The correct answer is {{CORRECT}}. The student answered {{ANSWER}}.",
+            "i_think": "Give me a concise hint on this multiple choice question: {{QUESTION}}. I think the answer is {{ANSWER}}.",
+            "answer": "Here is a question: {{QUESTION}}\n I think the answer is {{ANSWER}}. Please give me the correct answer and explain it clearly.\nThe options are: {{OPTIONS}}",
+            "minimal": "Question: {{QUESTION}}\nOptions: {{OPTIONS}}\nCorrect answer {{CORRECT}}\nMy guess: {{ANSWER}}\n\nGive me a hint.",
+            "text_hint": "Give a concise hint on this question: {{QUESTION}}\nMy answer is {{ANSWER}}",
+            "text_grading": "Question: {{QUESTION}}\nMy answer is {{ANSWER}}\nAnswer with a single statement ('correct', 'incorrect' or 'almost correct')."
+          }
+        }
+      </script>
+      <h1>Hello world</h1>
+      <div id="ai-settings">
+        <h2>AI settings</h2>
+        <div>
+          for example:
+          <dl>
+            <dt>Ollama</dt>
+            <dd><code>http://127.0.0.1:11434/v1</code></dd>
+            <dt>Cerebras</dt>
+            <dd><code>https://api.cerebras.ai/v1</code></dd>
+          </dl>
+        </div>
+        <form action="post" id="settings-form">
+          <label for="input-baseUrl">Base URL</label>
+          <input
+            type="text"
+            name="baseUrl"
+            id="input-baseUrl"
+            placeholder="http(s)://.../v1"
+          />
+
+          <label for="input-apiKey">API Key</label>
+          <input type="text" name="apiKey" id="input-apiKey" />
+
+          <label for="input-model">Model</label>
+          <input type="text" name="model" id="input-model" />
+          <button type="submit">Save</button>
+        </form>
+        <button id="btn-ping">ping ai -> console</button>
+        <button id="btn-models">models -> console</button>
+      </div>
+
+      <h2>Choice activity</h2>
+      <div class="activity activity-choice">
+        <p>What is the value of <code>x[2]</code>?</p>
+        <div class="code-copy-outer-scaffold">
+          <div class="sourceCode" id="cb2">
+            <pre
+              class="sourceCode python code-with-copy"
+            ><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x[<span class="dv">2</span>])</span></code></pre>
+          </div>
+          <button title="Copy to Clipboard" class="code-copy-button">
+            <i class="bi"></i>
+          </button>
+        </div>
+        <ul class="task-list">
+          <li>
+            <label><input type="checkbox" />1</label>
+          </li>
+          <li>
+            <label><input type="checkbox" />2</label>
+          </li>
+          <li>
+            <label><input type="checkbox" />3</label>
+          </li>
+          <li>
+            <label><input type="checkbox" />4</label>
+          </li>
+        </ul>
+        <script type="application/json" class="activity-meta">
+          {
+            "correct": [3],
+            "id": 1,
+            "options_md": ["1", "2", "3", "4"],
+            "question_md": "What is the value of `x[2]`?\n``` python\nx = [2, 3, 4]\nprint(x[2])\n```",
+            "type": "choice"
+          }
+        </script>
+      </div>
+
+      <h2>Text activity</h2>
+      <div class="activity activity-text">
+        <script type="application/json" class="activity-meta">
+          {
+            "correct": "2",
+            "id": 2,
+            "question_md": "What is 1+1?",
+            "type": "text",
+            "grading": "normalized-exact",
+            "prompt_key": "text_hint"
+          }
+        </script>
+        <p>What is 1+1?</p>
+        <input type="text" name="text-input" />
+      </div>
+
+      <!-- 
+      <h2>Dummy exercise</h2>
+      <div class="activity" data-act-id="1" data-act-type="code">
+        <textarea
+          class="exercise-input"
+          cols="80"
+          rows="5"
+          name="code-input"
+        ></textarea>
+
+        <div class="exercise-actions">
+          <button class="btn-submit">Submit</button>
+          <button class="btn-reset">Reset</button>
+          <button class="btn-feedback" disabled>Feedback</button>
+        </div>
+
+        <div class="spinner" style="display: none"></div>
+        <div class="small-box">
+          <p class="small-title">Code output</p>
+          <pre class="output-box"></pre>
+        </div>
+
+        <div class="small-box">
+          <p class="small-title">Feedback!</p>
+          <div class="feedback-box"></div>
+        </div>
+      </div> -->
+    </main>
+  </body>
+</html>

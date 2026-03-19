@@ -1,0 +1,122 @@
+[
+  {
+    "id": "appendix_d6_3d152630",
+    "author": "Gemma3:1b",
+    "question": "What is the value of 'k' in the while-loop code?",
+    "context": "# D.46\n\n**(a)** Using a for-loop and break:\n\n```{pyodide-python}\n#| read-only: false\nmy_list = [n / (1 + n**2) for n in range(0, 10**6)]\nk = 0\nfor x in my_list:\n    if x < 1e-4:\n        break\n    k = k + 1\n\nprint(k)\n```\n\n**(b)** Using a while-loop:\n\n```{pyodide-python}\n#| read-only: false\nmy_list = [n / (1 + n**2) for n in range(0, 10**6)]\nk = 0\nwhile my_list[k] > 1e-4:\n    k = k + 1\n\nprint(k)\n```\n\n",
+    "answer": "The value of 'k' is 100000",
+    "source": "appendix_d6.qmd"
+  },
+  {
+    "id": "appendix_d6_a5cc64fe",
+    "author": "Gemma3:1b",
+    "question": "What is the difference between `absolute1` and `absolute2`?",
+    "context": "# D.58\n\n`absolute1` does not work for numpy arrays because the if-statement does not make\nsense for arrays. For `absolute2`, the following code works:\n\n```{pyodide-python}\n#| read-only: false\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# Insert code for absolute2\n\nX = np.linspace(-2, 2, 40)\nY = absolute2(X)\nplt.plot(X, Y)\nplt.show()\n```\n\n",
+    "answer": " `absolute2` works with numpy arrays, while `absolute1` does not.",
+    "source": "appendix_d6.qmd"
+  },
+  {
+    "id": "appendix_d6_c4f565ae",
+    "author": "Gemma3:1b",
+    "question": "What are the first 21 numbers in both binary and decimal representations?",
+    "context": "# D.66\n\nThe first 21 numbers in both binary and decimal notation:\n\n| Decimal | Binary |\n|--------:|:------|\n| 0 | 0 |\n| 1 | 1 |\n| 2 | 10 |\n| 3 | 11 |\n| 4 | 100 |\n| 5 | 101 |\n| 6 | 110 |\n| 7 | 111 |\n| 8 | 1000 |\n| 9 | 1001 |\n| 10 | 1010 |\n| 11 | 1011 |\n| 12 | 1100 |\n| 13 | 1101 |\n| 14 | 1110 |\n| 15 | 1111 |\n| 16 | 10000 |\n| 17 | 10001 |\n| 18 | 10010 |\n| 19 | 10011 |\n| 20 | 10100 |\n\n",
+    "answer": "The first 21 numbers are 0, 1, 10, 11, 100, 101, 110, 111, 1000, 1001, 1010, 1011, 1100, 1101, 1110, 1111, 10000, 10001, 10010, 10011, 11000, 11001, 11010, 11011, 11100, 11101, 11110, 11111",
+    "source": "appendix_d6.qmd"
+  },
+  {
+    "id": "appendix_d5_e21e46c3",
+    "author": "Gemma3:1b",
+    "question": "What is the data type used to represent non-integer real numbers in Python?",
+    "context": "# How non-integers are represented in Python\n\nReal numbers that are not integers are stored using the datatype `float`. Because\nmemory is finite, not all real numbers can be represented exactly.\n\n**Remark D.70 (Sloppy description of 64-bit floating numbers)**  \nA 64-bit computer sets aside 64 bits to represent a real number of the form\n$\\epsilon \\cdot 10^\\alpha$, where $\\epsilon$ is (roughly) a 16-digit integer and\nthe exponent $\\alpha$ is roughly between `-340` and `+292`.\n\n**Example D.71**  \nUsing the sloppy description, the number $\\sqrt{2}$ is stored roughly as\n$$1.414213562373095 \\cdot 10^0.$$\n\n",
+    "answer": "float",
+    "source": "appendix_d5.qmd"
+  },
+  {
+    "id": "appendix_d1_56775b9d",
+    "author": "Gemma3:1b",
+    "question": "What is the purpose of the `for` loop in the example code?",
+    "context": "# A first look at how to efficiently repeat commands in Python\n\nIn Exercise D.9 above, you were asked to consider a code where an operation was\nrepeated multiple times. We now explain one way this can be done using a `for` loop.\n\n**Example D.10 (For-loop)** The following two codes do exactly the same thing when\nrun.\n\n```{pyodide-python}\n#| read-only: false\na = 0\nprint(a)\na = 1\nprint(a)\na = 2\nprint(a)\na = 3\nprint(a)\nprint(\"the end!\")\n```\n\n```{pyodide-python}\n#| read-only: false\nfor n in range(0, 4):\n    a = n\n    print(a)\nprint(\"the end!\")\n```\n\nExplanation of the `for` loop:\n\n1. `for n in range(0, 4)` means the block below is repeated for each `n` between\n   `0` and `3` (but not `4`).\n2. The indented lines are run by the loop. The loop first runs with `n = 0`, then\n   `n = 1`, and so on until `n = 3`.\n3. After the loop ends, Python moves on to the first unindented line following it.\n\n",
+    "answer": "To repeat the code block for a specified number of times.",
+    "source": "appendix_d1.qmd"
+  },
+  {
+    "id": "appendix_d1_b2e92059",
+    "author": "Gemma3:1b",
+    "question": "What data type is 'a' in the example D.13?",
+    "context": "# Some words on datatypes in Python\n\nPython stores variables in different ways depending on whether they contain text,\nnumbers, or lists. We say that Python uses different datatypes. For instance, Python\nwill treat a number differently depending on whether or not it is an integer.\n\n**Example D.13**\n\n```{pyodide-python}\n#| read-only: false\na = 2  # Here we store the value 2 as an integer.\nprint(type(a))  # Prints: <class 'int'>\n```\n\n",
+    "answer": "int",
+    "source": "appendix_d1.qmd"
+  },
+  {
+    "id": "appendix_d3_72ca2a0f",
+    "author": "Gemma3:1b",
+    "question": "What is the primary purpose of the if-else statement in Python?",
+    "context": "# If-else statements\n\nAlongside for- and while-loops, the if-else statement is the most important tool in\nprogramming.\n\n**Example D.41 (if-statements in Python)**\n\n```{pyodide-python}\n#| read-only: false\na = 10\n\nif a >= 3:\n    print(\"a is a BIG number\")\nelse:\n    print(\"a is a tiny number\")\n```\n\nIf you want to add more conditions, you can use `elif` and combine conditions using\n`and` or `or`.\n\n**Example D.42**\n\n```{pyodide-python}\n#| read-only: false\na = 10\n\nif a >= 3:\n    print(\"a is a BIG number\")\nelif a > -3 and a < 3:\n    print(\"a is a tiny number\")\nelif a <= -3:\n    print(\"a is a BIG but negative number\")\n```\n\n",
+    "answer": "To execute different code blocks based on conditions.",
+    "source": "appendix_d3.qmd"
+  },
+  {
+    "id": "appendix_d3_5642e817",
+    "author": "Gemma3:1b",
+    "question": "What does the `break` command do?",
+    "context": "# The break command\n\nThe `break` command tells Python to stop the nearest loop and to continue the program\non the first unindented line below it.\n\n**Example D.44**  \nThe following code does exactly the same as the one in Example D.38.\n\n```{pyodide-python}\n#| read-only: false\nS = 0\nfor n in range(1, 1000):\n    if n > 10:\n        break\n    S = S + 1 / n\n\nprint(S)\n```\n\n**Remark D.45**  \nIf you have nested loops, `break` only stops the inner-most loop.\n\n",
+    "answer": "It stops the nearest loop.",
+    "source": "appendix_d3.qmd"
+  },
+  {
+    "id": "appendix_d4_e8a2ca8c",
+    "author": "Gemma3:1b",
+    "question": "What is the value of `f(3)`?",
+    "context": "# How to define a function in Python\n\n**Example D.47 (Defining functions in Python)**  \nIn the following code we define $f(x) = x^2 - 5x + 4$ in Python and compute $f(3)$.\n\n```{pyodide-python}\n#| read-only: false\ndef f(x):\n    y = x**2 - 5 * x + 4\n    return y\n\nz = f(3)\nprint(z)\n```\n\nExplanation:\n\n1. `def f(x):` tells Python that a function named `f` is being defined.\n2. The `return` value is the output of the function.\n3. When we write `f(3)`, the function code is run with `x = 3`.\n\n",
+    "answer": "The value of `f(3)` is 3^2 - 5*3 + 4 = 9 - 15 + 4 = 0",
+    "source": "appendix_d4.qmd"
+  },
+  {
+    "id": "appendix_d4_4cba74ea",
+    "author": "Gemma3:1b",
+    "question": "Why is it important to declare variables inside functions?",
+    "context": "# Warning: the importance of local namespaces\n\nVariables created inside a function are local and cannot be accessed outside the\nfunction. This is a common source of bugs.\n\n**Example D.50**  \nThe following code makes no sense and will crash.\n\n```{pyodide-python}\n#| read-only: false\nx = 3\n\ndef f(x):\n    y = x**2 - 5 * x + 4\n    return y\n\nprint(y)\n```\n\n**Example D.51**  \nThe following code also crashes.\n\n```{pyodide-python}\n#| read-only: false\nx = 3\n\ndef f(x):\n    y = x**2 - 5 * x + 4\n    return y\n\nf(x)\nprint(y)\n```\n\nThe variable `y` only exists inside the function definition. After the function\nreturns, local variables are deleted.\n\n**Example D.52**  \nThanks to local namespaces, we can be sure that the following code works:\n\n```{pyodide-python}\n#| read-only: false\na = [1, 2, 3]\nb = [4, 5, 6]\nc = sum(a)\nprint(b)\n```\n\n",
+    "answer": "Variables defined inside functions are local and cannot be accessed outside the function.",
+    "source": "appendix_d4.qmd"
+  },
+  {
+    "id": "appendix_d4_6914d9ef",
+    "author": "Gemma3:1b",
+    "question": "What does the command `plt.plot(X, Y)` do?",
+    "context": "# How to plot functions in Python using lists\n\n**Example D.53 (Plotting with datatype list)**  \nThe following code plots $f(x) = x^2 + 2x + 3$ over the interval $[0, 1]$.\n\n```{pyodide-python}\n#| read-only: false\nimport matplotlib.pyplot as plt\n\ndef f(x):\n    y = x**2 + 2 * x + 3\n    return y\n\nX = [n / 10 for n in range(0, 11)]\nY = [f(x) for x in X]\n\nplt.plot(X, Y)\nplt.show()\n```\n\nThe command `plt.plot(X, Y)` connects the points with straight line segments. If you\nuse `plt.plot(X, Y, \"bo\")` you will get blue dots instead of a line.\n\n",
+    "answer": "Plots the data in the X and Y lists.",
+    "source": "appendix_d4.qmd"
+  },
+  {
+    "id": "appendix_d4_4f955997",
+    "author": "Gemma3:1b",
+    "question": "What is the purpose of the `a` function in the provided code, and how does it relate to the `S` function?",
+    "context": "# Exercise D.55\n\nConsider the following code:\n\n```{pyodide-python}\n#| read-only: false\nimport matplotlib.pyplot as plt\n\nN = 10**4\n\ndef a(k):\n    return 1 / 2**k\n\ndef S(a_func, n):\n    return sum([a_func(k) for k in range(0, n)])\n\nn_values = [n for n in range(0, N)]\nY = [S(a, n) for n in n_values]\n\nplt.plot(n_values, Y, \"bo\")\n```\n\n1. Explain in mathematical terms what this code does.\n2. The symbol `a` takes more than one role in the above code. Explain what roles\n   these are.\n3. Make the code easier to read by giving `a` different names where possible.\n\n",
+    "answer": "The `a` function calculates a value based on the input `k`, while the `S` function sums up the results for a given number of iterations (n).",
+    "source": "appendix_d4.qmd"
+  },
+  {
+    "id": "appendix_d4_a778e148",
+    "author": "Gemma3:1b",
+    "question": "What does the code `Y = f(X)` do?",
+    "context": "# Plotting functions using numpy arrays\n\nNumpy arrays are like lists, but restricted to numeric entries. This makes it possible\nto do fast, element-wise operations.\n\n**Example D.56 (Features of numpy arrays)**\n\n```{pyodide-python}\n#| read-only: false\nimport numpy as np\n\ndef f(x):\n    return x**2\n\na = [1, 2, 3, 4]\nb = [1, 2, 5, 3]\n\nA = np.array(a)\nB = np.array(b)\n\nC = A - B\nD = A + B\nE = A / B\n\nF = np.zeros(3)\nG = np.ones(4)\nH = np.arange(4)\nI = np.linspace(0, 1, 5)\n\nJ = I.tolist()\nK = f(A)\n\nprint(\"A =\", A)\nprint(\"B =\", B)\nprint(\"C =\", C)\nprint(\"D =\", D)\nprint(\"E =\", E)\nprint(\"F =\", F)\nprint(\"G =\", G)\nprint(\"H =\", H)\nprint(\"I =\", I)\nprint(\"J =\", J)\nprint(\"K =\", K)\n```\n\nNotes:\n\n- `np.linspace(a, b, N)` creates `N` equally spaced points in `[a, b]`.\n- Applying a function to an array is done element-wise.\n\n**Example D.57**  \nThe following code gives exactly the same output as Example D.53.\n\n```{pyodide-python}\n#| read-only: false\nimport matplotlib.pyplot as plt\nimport numpy as np\n\ndef f(x):\n    y = x**2 + 2 * x + 3\n    return y\n\nX = np.linspace(0, 1, 11)\nY = f(X)\n\nplt.plot(X, Y)\nplt.show()\n```\n\n",
+    "answer": "It calculates the square of each element in the `X` array and adds 2 to each element.",
+    "source": "appendix_d4.qmd"
+  },
+  {
+    "id": "appendix_d2_b6ea4a03",
+    "author": "Gemma3:1b",
+    "question": "What is the primary method for computing sequences in Python, and how does it differ from using a list comprehension?",
+    "context": "# Some ways to compute sequences in Python\n\nSuppose we want to compute many entries of the sequence\n$$\\left(\\frac{1}{2^k}\\right)_{k=0}^\\infty = \\left(1, \\frac{1}{2}, \\frac{1}{4}, \\dots \\right).$$\n\n**Example D.17 (Computing sequences using a for-loop)**  \nThe following two codes do exactly the same thing when run.\n\n```{pyodide-python}\n#| read-only: false\nprint(1 / 2**0)\nprint(1 / 2**1)\nprint(1 / 2**2)\n```\n\n```{pyodide-python}\n#| read-only: false\nfor k in range(0, 3):\n    print(1 / 2**k)\n```\n\nAnother way of computing lists is to use a list comprehension. It has the benefit of\nboth computing and storing a sequence of numbers in a single line of code.\n\n**Example D.18 (Computing sequences using a list)**  \nThe following two codes do exactly the same thing when run.\n\n```{pyodide-python}\n#| read-only: false\na = [1 / 2**0, 1 / 2**1, 1 / 2**2]\nprint(a)\n```\n\n```{pyodide-python}\n#| read-only: false\na = [1 / 2**k for k in range(0, 3)]\nprint(a)\n```\n\n",
+    "answer": "The primary method is using a `for` loop. List comprehensions offer a concise way to compute sequences simultaneously.",
+    "source": "appendix_d2.qmd"
+  },
+  {
+    "id": "appendix_d2_202174b5",
+    "author": "Gemma3:1b",
+    "question": "What is the 10th Fibonacci number?",
+    "context": "# A slightly more advanced example: the Fibonacci sequence\n\nThe Fibonacci numbers are\n$$1, 1, 2, 3, 5, 8, 13, \\dots$$\nand satisfy $a_n = a_{n-1} + a_{n-2}$ for $n \\ge 2$ when we set $a_0 = 1$ and\n$a_1 = 1$.\n\n**Example D.31**  \nThe following code can be used to compute Fibonacci numbers.\n\n```{pyodide-python}\n#| read-only: false\na = [1, 1]\n\nfor n in range(2, 20):\n    new_term = a[n - 1] + a[n - 2]\n    a.append(new_term)\n\nfor n in range(0, 20):\n    print(\"The\", n + 1, \"th Fibonacci number is\", a[n])\n```\n\n",
+    "answer": "14",
+    "source": "appendix_d2.qmd"
+  }
+]

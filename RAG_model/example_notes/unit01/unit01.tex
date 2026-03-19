@@ -1,0 +1,417 @@
+\documentclass[hyperref={pdfpagelabels=false},table, handout]{beamer}
+
+\input{lec_common}
+
+\begin{document}
+
+\part{Unit 1: First steps - A bit of everything.}
+
+%\frame{\tableofcontents}
+\begin{frame}{This Lecture}
+
+  \begin{itemize}
+    \item About this course
+    \item About Python
+    \item Data types and variables
+    \item Import modules
+    \item Lists
+    \item For loops
+    \item Elementary plotting
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Why Python?}
+Python is ...
+\begin{itemize}
+%\item{Easy to write and to read}
+\item Free and open source
+\item It is a \alert{scripting language} - an interpreted \structure{not a compiled} language
+\item It is object oriented with modern exception handling, dynamic typing etc.
+\item It has plenty of libraries among others the scientific ones:
+\small linear algebra;  visualisation tools: plotting, image analysis; differential equations solving; symbolic computations; statistics
+; etc.
+\item It has possible usages: \small
+Scientific computing, scripting, web sites, text parsing, data mining, ...
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Premisses}
+\begin{itemize}
+\item Python version $\ge 3.x$ (installed through Anaconda).
+\item \structure{IPython} shell
+\item Work bench \structure{Spyder} (many others exist)
+\item We work (later) with the Jupyter notebook.
+\item All programs in this course start with the line
+\begin{python}
+from numpy import *
+\end{python}
+(will be explained later).
+\end{itemize}
+\end{frame}
+\begin{frame}[fragile]{Course Book}
+  Scientific Computing with Python 3 (2nd ed.)\\
+Claus Führer, Jan Erik Solem, Olivier Verdier\\
+Packt Publishing, 2021
+\\[1cm]
+\url{www.packtpub.com/}
+\\[1cm]
+\begin{center}
+\includegraphics[width=2cm]{Python.jpg}
+\end{center}
+\end{frame}
+
+
+\begin{frame}[fragile]{Examples}
+Python may be used in \alert{interactive} mode \\
+(executed in an \texttt{IPython} shell)
+\begin{python}
+In [2]: x = 3
+In [3]: y = 5
+In [4]: print(x + y)
+8
+\end{python}
+
+Note:
+\begin{python}
+In [2]:
+\end{python}
+  is the \emph{prompt string} of the \texttt{IPython} shell. It counts the statements.
+  In the more basic \texttt{Python} shell the \emph{prompt string} is \texttt{>\!>\!>}.
+\end{frame}
+\begin{frame}[fragile]{Examples: Linear Algebra}
+Let us solve
+\[\begin{pmatrix}1 &2\\3 &4\end{pmatrix} \cdot x = \begin{pmatrix}2\\1\end{pmatrix}\]
+\begin{python}
+In [5]: from scipy.linalg import solve
+In [6]: M = array([[1., 2.],
+                   [3., 4.]])
+In [7]: V = array([2., 1.])
+In [8]: x = solve(M, V)
+In [9]: print(x)
+[-3.   2.5]
+\end{python}
+Note: A line can be continued on the next line \emph{without any continuation symbol}
+as long as parentheses or \emph{brackets are not closed}.
+\end{frame}
+\begin{frame}[fragile]{More examples}
+Computing $\ee^{\ii\pi}$ and $2^{100}$:
+\begin{python}
+In [10]: print(exp(1j*pi)) # should return -1
+(-1+1.22460635382e-16j)
+In [11]: print(2**100)
+1267650600228229401496703205376
+\end{python}
+Note: Everything following \pyth!#! is treated as a comment.\\
+\vfill
+{\tiny In this course expected results are displayed as comments directly after the command.}
+\vfill
+\end{frame}
+
+
+\begin{frame}[fragile]{Numbers}
+A number may be an \alert{integer}, a \alert{real number} or a \alert{complex number}.
+The usual operations are
+\begin{itemize}
+\item \code{+} and \code{-} addition and substraction
+\item \code{*} and \code{/} multiplication and division
+\item \code{**} power
+\end{itemize}
+\begin{python}
+2**(2+2) #  16
+1.0j**2  # -1.0
+\end{python}
+\end{frame}
+
+\begin{frame}[fragile]{Strings}
+Strings are ``lists'' of characters, enclosed by simple or double quotes:
+\begin{python}
+str1 = 'valid string'
+str2 = "string with double quotes"
+\end{python}
+\pause
+You may also use \alert{triple quotes} for strings including multiple lines:
+\begin{python}
+str3 = """This is
+a long,
+long string"""
+\end{python}
+\end{frame}
+
+\begin{frame}[fragile]{Import modules}
+\begin{block}{Importing Numpy}
+In order to use standard mathematical functions in Python, you must import some module.
+ We will use \structure{numpy}.
+\end{block}
+
+\begin{python}
+# You can import numpy and then
+# use dot-notation after the name numpy
+import numpy
+print (numpy.exp(1j*numpy.pi))
+# (-1+1.2246467991473532e-16j)
+\end{python}
+
+\pause
+
+\begin{python}
+# You can import numpy and rename the module
+import numpy as np
+print (np.exp(1j*np.pi))
+# (-1+1.2246467991473532e-16j)
+\end{python}
+
+\pause
+
+\begin{python}
+# Or only import what you need
+from numpy import exp, pi
+print (exp(1j*pi))
+# (-1+1.2246467991473532e-16j)
+\end{python}
+
+\end{frame}
+
+\begin{frame}[fragile]{Variables}
+\begin{block}{Variables}
+A variable is a \alert{reference} to an object.
+An object may have several references.
+One uses the \alert{assignment operator} \code{=} to assign a value to a variable.
+\end{block}
+
+\vskip -5pt
+
+\begin{example}
+\begin{python}
+i = 42      # integers
+a = 3.14    # floats, the dot makes the difference
+c = 5 + 1j  # complex numbers
+sum = a + c # the sum will be a complex
+print( a )         #  8.14 + 1j
+print( type(sum) ) #  <class 'complex'>
+\end{python}
+\end{example}
+
+\pause
+\vskip -5pt
+
+\begin{example}
+\begin{python}
+x = [3, 4] # a list object is created
+y = x # this object is now referenced by x and by y
+del x # we delete one of the references
+del y # all references are deleted: the object is deleted
+\end{python}
+\end{example}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Concept: Lists}
+\begin{block}{Lists}
+A Python list is an \alert{ordered} list of objects, enclosed in square brackets. One accesses elements of a list using \alert{zero-based} indices inside square brackets.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{List Examples}
+\begin{example}
+\begin{python}
+L1 = [1, 2]
+L1[0] # 1
+L1[1] # 2
+L1[2] # raises IndexError
+
+L2 = ['a', 1, [3, 4]]
+L2[0]    # 'a'
+L2[2][0] # 3
+
+L2[-1] # last element: [3,4]
+L2[-2] # second to last: 1
+\end{python}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]{List Utilities}
+\begin{itemize}[<+->]
+\item \pyth{range(n)} can be used to fill list with $n$ elements, starting with zero:
+\begin{python}
+list(range(5))  # [0, 1, 2, 3, 4]
+\end{python}
+\item \pyth{len(L)} gives the \alert{length} of a list:
+\begin{python}
+len(['a', 1, 2, 34]) # returns 4
+\end{python}
+\item Use \pyth{append} to append an element to a list:
+\begin{python}
+L = ['a', 'b', 'c']
+L[-1] # 'c'
+L.append('d')
+L     # L is now ['a', 'b', 'c', 'd']
+L[-1] # 'd'
+\end{python}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{List Comprehension}
+A convenient way to build up lists is to use the \alert{list comprehension} construct, possibly with a conditional inside.
+\begin{defblock}
+The syntax of a list comprehension is
+\begin{python}
+[<expr> for <variable> in <list>]
+\end{python}
+\end{defblock}
+\vfill
+\begin{example}
+\begin{python}
+L  = [2, 3, 10, 1, 5]
+L2 = [x*2 for x in L] # [4, 6, 20, 2, 10]
+L3 = [x*2 for x in L if 4 < x <= 10] # [20, 10]
+\end{python}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]{List Comprehension in Mathematics}
+\begin{block}{Mathematical Notation}
+This is very close to the mathematical notation for sets. Compare:
+\[L_2 = \{2x;\ x\in L\}\]
+and
+\begin{python}
+L2 = [2*x for x in L]
+\end{python}
+  One big difference though is, that lists are \emph{\alert{ordered}} while sets aren't.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Operations on Lists}
+\begin{itemize}[<+->]
+\item Adding two lists \alert{concatenates} (\emph{sammanfogar}) them:
+\begin{python}
+L1 = [1, 2]
+L2 = [3, 4]
+L = L1 + L2 # [1, 2, 3, 4]
+\end{python}
+\item Logically, multiplying a list with an integer concatenates the list with
+itself several times: \texttt{n*L} is equivalent to $\underbrace{L+L+\cdots+L}_{\text{$n$ times}}$.
+\vskip 8pt
+\begin{python}
+L = [1, 2]
+3 * L # [1, 2, 1, 2, 1, 2]
+\end{python}
+(To multiply each element by $c$, we use \emph{arrays} instead of lists.)
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{\pyth!for! loops}
+\begin{block}{for loop}
+A \alert{for loop} allows to loop through a list using an \alert{index variable}. This variable takes succesively the values of the elements in the list.
+\end{block}
+\pause
+\begin{example}
+\begin{python}
+L = [1, 2, 10]
+for s in L:
+  print(s * 2) # output: 2 4 20
+\end{python}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]{Repeating a Task}
+One \alert{typical use} of the \pyth{for} loop is to repeat a certain task a fixed number of times:
+\begin{python}
+n = 30
+for i in range(n):
+  do_something # this gets executed n times
+\end{python}
+\end{frame}
+
+
+\begin{frame}[fragile]{Indentation}
+The part to be repeated in the for loop has to be properly \alert{indented}:
+\begin{python}
+for elt in my_list:
+  do_something()
+  something_else()
+  etc
+print("loop finished") # outside the for block
+\end{python}
+\pause
+\vfill
+\alert{Note:} In contrast to other programming languages, the indentation in Python is \alert{mandatory}.
+\vfill
+Many other kinds of Python structures also have to be indented, we will cover this when introducing them.
+\end{frame}
+
+
+\begin{frame}[fragile]{Elementary Plotting}
+We first make the central visualization tool in Python available:
+\begin{python}
+from matplotlib.pyplot import *
+\end{python}
+
+Then we generate two lists
+\begin{python}
+x_list=list(range(100)) # the first hundred numbers
+y_list=[sqrt(x) for x in x_list]
+\end{python}
+
+And then we make a graph
+\begin{python}
+plot(x_list,y_list,'o')
+title('My first plot')
+xlabel('x')
+ylabel('Square root of x')
+show()
+\end{python}
+\end{frame}
+\begin{frame}[fragile]{Elementary Plotting}
+\includegraphics[width=.9\textwidth]{figure_1.png}
+\end{frame}
+
+\begin{frame}[fragile]{How to run a piece of code}
+There are two phases in Python programming:
+\begin{enumerate}
+\item \alert{Writing} the code
+\item \alert{Executing} (running) it
+\end{enumerate}
+\vfill
+For Task 2, one needs to give the code to the Python \alert{interpreter} which reads the code and figures out what to do with it.
+\vfill
+Short snippets of code can be written directly in the interpreter and executed interactively. We use the interpreter \alert{IPython} which has extra features.
+\vfill
+For writing a larger program, one generally uses a text \alert{editor} which can highlight code in a good way.
+\vfill
+There are also development suites which bundle the interpreter, editor and other things into the same program.
+
+\end{frame}
+
+\begin{frame}[fragile]{Spyder}
+Example of a development environment, Spyder
+\includegraphics[height=.7\textheight]{Spyder}
+\end{frame}
+
+\begin{frame}[fragile]{IPython}
+\vfill
+IPython is an enhanced Python interpreter.
+\vfill
+You can launch it as a stand-alone application, but it is also embedded in Spyder.
+\vfill
+Some notes on usage:
+\begin{itemize}
+\item To execute the contents of a file named \code{myscript.py} just write \pyth{run myscript} in IPython
+or use the green "run" arrow  \hspace{1em} \includegraphics[scale=0.6]{Spyder_run} \hspace{1em} in the Spyder toolbar.
+\item Use the arrow keys\hspace{1em}\includegraphics[scale=0.2]{up_down_arrow_keys.jpg}\hspace{1em} to visit previous commands and
+\item Use the tabulation key
+\hspace{1em}\includegraphics[scale=0.2]{tab_key.jpg}\hspace{1em}
+to auto-complete commands and names
+\item To get \alert{help} on an object just type \code{?} after it and then return
+\item When you want to quit, write \code{exit()}
+\end{itemize}
+
+\end{frame}
+
+
+
+\end{document}

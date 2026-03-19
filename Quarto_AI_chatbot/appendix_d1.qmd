@@ -1,0 +1,447 @@
+---
+title: "Appendix D.1 Introduction"
+format: html
+filters:
+  - coatless-quarto/pyodide
+  - py-activity
+---
+
+Appendix D: A crash course in Python  
+NUMA01: Computational Programming with Python  
+Malin Christersson, Robert Klofkorn  
+
+## D.1 Introduction
+
+### How to install Python 3 and write your first program
+
+Go to <https://www.spyder-ide.org> and download and install the latest version of Spyder.  
+Once installed, launch the program.
+
+::: {.callout-note}
+Figure omitted in this web version.
+:::
+
+### Exercise D.1
+
+Type `print("Hello world")` in the editor window and press the green play button.  
+What output do you get? Also try `print("2+2=", 2+2)`.
+
+```{pyodide-python}
+#| read-only: false
+print("Hello world")
+print("2+2=", 2 + 2)
+```
+
+::: {.callout-note}
+**Remark.** Python treats `"2+2"` as text to be printed, and `2+2` as something to be
+computed. A comma is used to separate different types of input to `print`.
+:::
+
+### A first look at basic syntax for arithmetic in Python
+
+We now consider how to do basic arithmetic in Python.
+
+**Example D.2** Enter the following code into the Spyder editor.
+
+```{pyodide-python}
+#| read-only: false
+a = 2
+b = 4
+c = a + b
+print("a+b=", c)
+```
+
+When you press the green play button you get the output `a+b=6`.
+
+Here, `a`, `b`, and `c` are variables. Technically speaking, a variable is a space in
+the memory of the computer which can store one piece of information, such as a
+number.
+
+**Example D.3** Enter the following code into the Spyder editor.
+
+```{pyodide-python}
+#| read-only: false
+a = 2
+b = 4
+c = a + b
+a = 10
+print("a+b=", c)
+```
+
+When you press the green play button you still get the output `a+b=6`.
+
+Line-by-line explanation of Example D.2:
+
+1. Python creates a variable `a` and assigns it the value `2`.
+2. Python creates a variable `b` and assigns it the value `4`.
+3. Python creates a variable `c`, computes `a + b`, and assigns this value to `c`.
+4. Python prints the value of `c` on the screen (together with the string `"a+b="`).
+
+The above example illustrates several peculiarities of arithmetic in Python and how
+a code is run:
+
+1. The code is executed line by line.
+2. Expressions such as `a = b` should be read from right to left. That is, `a` is
+   assigned whatever value `b` has, but not vice versa.
+3. If a variable gets assigned some value, it has no memory of how that happened.
+   Changing `a` later does not affect the value stored in `c`.
+
+### Exercise D.4
+
+Explore the various ways to do arithmetic operations in Python by running the
+following commands for suitable values of `a` and `b`:
+
+`a + b`, `a * b`, `a - b`, `a - -b`, `a / b`, `a // b`, `a % b`.
+
+```{pyodide-python}
+#| read-only: false
+a = 7
+b = 3
+
+print("a + b =", a + b)
+print("a * b =", a * b)
+print("a - b =", a - b)
+print("a - -b =", a - -b)
+print("a / b =", a / b)
+print("a // b =", a // b)
+print("a % b =", a % b)
+```
+
+### Basic rules for variable names
+
+We now turn to a discussion of the basic syntax in Python. First, the types of names
+you are allowed to give a variable.
+
+**Example D.5** You can give variables much more interesting names than just
+`a`, `b`, `x`, or `y`. Here is an example:
+
+```{pyodide-python}
+#| read-only: false
+ponies = 2
+cookies = 4
+pony_Cookie32 = ponies + cookies
+print(pony_Cookie32)
+```
+
+We make the following remarks:
+
+4. Python is case sensitive. This means that `n` and `N` are as different as `n` and `m`.
+5. By tradition, the name of a variable should never start with an upper case letter.
+6. A variable cannot be given a numerical name such as `2` or `34`.
+   Numbers can be part of the name of a variable, as long as the name starts with a
+   letter or an underscore `_`. Certain special symbols, such as `$`, `#`, and `%`,
+   can never be used in the name of a variable.
+7. The name of a variable cannot contain a space.
+8. You should not give a variable a name that already means something different.
+   For instance, do not give a variable the name `print` (however, `Print` is fine).
+
+### Indentation, line breaks, and comments
+
+**Example D.6** In Python, we need to be careful with how we place indentations.
+For instance, both of the following programs will crash:
+
+```python
+a = 2
+b = 4
+    c = a + b
+print(c)
+```
+
+```python
+a = 2
+b = 4
+c = a + b
+  print(c)
+```
+
+9. Python is careful with indentation. If Python does not understand why we make
+   some indentation, it will crash.
+10. Later in this chapter, we will see situations where indentations become a natural
+    part of the code (for loops, while loops, if-else structures, and functions).
+
+**Example D.7** In contrast to the situation with indentations, Python is much less
+sensitive with respect to whether or not we skip a line. The following code runs just
+fine:
+
+```{pyodide-python}
+#| read-only: false
+a = 2; b = 4  # Two commands on the same line.
+c = (a + b) - 3  # Here we use soft parentheses.
+
+print(c)
+```
+
+11. Python does not care if you skip a line, or twenty.
+12. You can place multiple commands on the same line, as long as they are separated
+    by a semicolon `;`.
+13. Everything you write on a line following a hashtag `#` is ignored by Python.
+14. You can use "soft" parentheses `(` and `)` just as you would in a normal
+    computation. You cannot replace them with `[` `]` or `{` `}`.
+
+15. It is a good thing for a program to crash. It is a way for Python to let you know
+    that the result would probably have been false because the code was written in
+    a bad way.
+
+### Exercise D.8
+
+Will the following codes run? If not, why? If yes, what is the output?
+
+**(a)**
+
+```{pyodide-python}
+#| read-only: false
+a = 2
+b = 4
+6 = a + b
+print(a + b)
+```
+
+**(b)**
+
+```{pyodide-python}
+#| read-only: false
+a = 2
+b = 4
+a = a + b
+print(a)
+```
+
+**(c)**
+
+```{pyodide-python}
+#| read-only: false
+a = 2
+b = 4
+a = b
+print(b)
+```
+
+**(d)**
+
+```{pyodide-python}
+#| read-only: false
+a = 2
+b = 4
+c = a + b
+print(c)
+```
+
+**(e)**
+
+```{pyodide-python}
+#| read-only: false
+a = 2; b = 4; a = a + b
+
+print(b)
+```
+
+**(f)**
+
+```{pyodide-python}
+#| read-only: false
+Ponies = 2
+Cookies = 4
+Rainbows = ponies + cookies
+print(rainbows)
+```
+
+### Exercise D.9
+
+Consider the following codes. Can you express mathematically what they compute?
+
+**(a)**
+
+```{pyodide-python}
+#| read-only: false
+a = 1
+a = a + 1/2
+a = a + 1/4
+a = a + 1/8
+a = a + 1/16
+
+print(a)
+```
+
+**(b)**
+
+```{pyodide-python}
+#| read-only: false
+a = 1
+a = 1/(1 + a)
+a = 1/(1 + a)
+a = 1/(1 + a)
+a = 1/(1 + a)
+
+print(a)
+```
+
+Hint: You have already seen these objects on page 87.
+
+### A first look at how to efficiently repeat commands in Python
+
+In Exercise D.9 above, you were asked to consider a code where an operation was
+repeated multiple times. We now explain one way this can be done using a `for` loop.
+
+**Example D.10 (For-loop)** The following two codes do exactly the same thing when
+run.
+
+```{pyodide-python}
+#| read-only: false
+a = 0
+print(a)
+a = 1
+print(a)
+a = 2
+print(a)
+a = 3
+print(a)
+print("the end!")
+```
+
+```{pyodide-python}
+#| read-only: false
+for n in range(0, 4):
+    a = n
+    print(a)
+print("the end!")
+```
+
+Explanation of the `for` loop:
+
+1. `for n in range(0, 4)` means the block below is repeated for each `n` between
+   `0` and `3` (but not `4`).
+2. The indented lines are run by the loop. The loop first runs with `n = 0`, then
+   `n = 1`, and so on until `n = 3`.
+3. After the loop ends, Python moves on to the first unindented line following it.
+
+### Exercise D.11
+
+Will these codes run? If so, what are their outputs?
+
+**(a)**
+
+```{pyodide-python}
+#| read-only: false
+for n in range(0, 4):
+    print(n)
+print("mississippi")
+print("hello")
+```
+
+**(b)**
+
+```{pyodide-python}
+#| read-only: false
+for n in range(0, 4):
+    print(n)
+    print("mississippi")
+print("hello")
+```
+
+### Exercise D.12
+
+Rewrite the code in Exercise D.9 using `for` loops.
+
+```{pyodide-python}
+#| read-only: false
+# (a) Rebuild the sum 1 + 1/2 + 1/4 + 1/8 + 1/16 using a for-loop.
+a = 1
+
+# TODO: update a inside a for-loop
+
+print("Result for (a):", a)
+```
+
+```{pyodide-python}
+#| read-only: false
+# (b) Rebuild the repeated fraction using a for-loop.
+a = 1
+
+# TODO: update a inside a for-loop
+
+print("Result for (b):", a)
+```
+
+### Some words on datatypes in Python
+
+Python stores variables in different ways depending on whether they contain text,
+numbers, or lists. We say that Python uses different datatypes. For instance, Python
+will treat a number differently depending on whether or not it is an integer.
+
+**Example D.13**
+
+```{pyodide-python}
+#| read-only: false
+a = 2  # Here we store the value 2 as an integer.
+print(type(a))  # Prints: <class 'int'>
+```
+
+### Exercise D.14
+
+1. Check the type of the variable defined by `b = 3/2`.
+2. Check the type of the variable defined by `c = 4/2`.
+
+```{pyodide-python}
+#| read-only: false
+b = 3/2
+c = 4/2
+
+print("type(b) =", type(b))
+print("type(c) =", type(c))
+```
+
+In addition to integers and floating point numbers, we will encounter the following
+datatypes in this chapter:
+
+- **String**: a variable containing text, e.g. `a = "Hej"`.
+- **List**: a variable containing a list of other variables, e.g. `a = [2, 3/2, "Hej"]`.
+- **Numpy array**: a special type of list that can only contain integers or floating
+  point numbers (and has more advanced features).
+
+### How to store and manipulate sequences using Python lists
+
+One way of storing sequences in Python is by using lists.
+
+**Example D.16**
+
+```{pyodide-python}
+#| read-only: false
+a = [0, 1, 2, 3, 4, 5]  # list of integers
+b = ["cheese", 88]  # list of a string and an ice cream
+
+print(a)       # prints the entire list
+print(a[0])    # prints 1st entry
+print(a[3])    # prints 4th entry
+print(a[-1])   # prints last entry
+print(a[-2])   # prints second to last entry
+
+print("len(a) =", len(a))  # length of the list
+print("sum(a) =", sum(a))  # sum of entries
+print("max(a) =", max(a))  # largest entry
+print("min(a) =", min(a))  # smallest entry
+
+a.append("oi")  # add entry "oi" to the end of the list
+a.pop(3)  # delete the 4th entry in the list
+
+c = a + b  # concatenation
+d = b * 2  # repetition
+
+e = a[2:5]    # slice: entries 2, 3, 4
+f = a[2:]     # slice from index 2 to the end
+g = a[:5]     # slice from start to index 4
+h = a[1:4:2]  # every second entry between indices 1 and 3
+
+print("c =", c)
+print("d =", d)
+print("e =", e)
+print("f =", f)
+print("g =", g)
+print("h =", h)
+```
+
+The code is more or less explained by the comments, but we note:
+
+1. Use square brackets `[` `]` to create a list and commas `,` to separate entries.
+2. Writing `a[3] = 10` changes an entry in the list.
+3. `len`, `sum`, `max`, and `min` work only if the list contains numbers.
+4. Lists are easy to modify with `append`, `pop`, concatenation, and slicing.
