@@ -1,0 +1,73 @@
+---
+title: "Multiple Output Formats"
+author: "CTM Workshop Lund 2026"
+date: today
+
+format:
+  html:
+    toc: true
+    theme: cosmo
+  pdf:
+    toc: true
+  epub:
+    toc: true
+  docx:
+    toc: true
+---
+
+## Introduction
+
+This document is a minimal example demonstrating Quarto's ability to render
+a single source file into **multiple output formats** simultaneously.
+
+Run the following command in your terminal to render all formats at once:
+
+```bash
+quarto render multiple-output.qmd --to all
+```
+
+Quarto will produce four files:
+
+- `multiple-output.html` — a styled web page
+- `multiple-output.pdf` — a print-ready PDF (requires TinyTeX: `quarto install tinytex`)
+- `multiple-output.epub` — an e-book
+- `multiple-output.docx` — a Microsoft Word document
+
+## A Simple Example
+
+Here is a short piece of content that will appear identically across all formats.
+
+### Mathematical Notation
+
+Quarto supports LaTeX math in all formats:
+
+$$
+f(x) = \frac{1}{\sigma\sqrt{2\pi}} \exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
+$$
+
+### Code and Output
+
+```python
+import math
+
+values = [1, 4, 9, 16, 25]
+roots  = [math.sqrt(v) for v in values]
+
+for v, r in zip(values, roots):
+    print(f"sqrt({v:2d}) = {r:.1f}")
+```
+
+### A Table
+
+| Format | Extension | Needs extra tools? |
+|--------|-----------|--------------------|
+| HTML   | `.html`   | No                 |
+| PDF    | `.pdf`    | TinyTeX / LaTeX    |
+| EPUB   | `.epub`   | No                 |
+| Word   | `.docx`   | No                 |
+
+## Summary
+
+The key insight is that **you write your content once** and Quarto handles
+the conversion. Each format can be configured independently under its own
+key in the YAML header while sharing the same source document.
