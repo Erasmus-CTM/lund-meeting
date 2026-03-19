@@ -141,6 +141,84 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}{Output Formats}
+    \small
+    \begin{columns}[t]
+        \begin{column}{0.55\textwidth}
+            \begin{itemize}
+                \item By default, Quarto renders to \textbf{HTML}.
+                \item The format is set in the YAML header via \icode{format:}.
+                \item Multiple formats can be rendered at once — Quarto will produce all of them with a single \icode{quarto render}.
+                \item \textbf{PDF} requires a \LaTeX{} installation. The easiest option is TinyTeX, which Quarto can install for you: \icode{quarto install tinytex}
+               % \item \textbf{EPUB} and \textbf{Word} require no extra dependencies.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{block}{Single format}
+                \ttfamily\footnotesize
+                format: pdf
+            \end{block}
+            \vspace{0.4cm}
+            \begin{block}{Multiple formats}
+                \ttfamily\footnotesize
+                format:\\
+                \quad html: default\\
+                \quad pdf: default\\
+                \quad epub: default\\
+                \quad docx default
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\section{Quarto Book}
+
+\begin{frame}{What is a Quarto Book?}
+    \begin{itemize}
+        \item A Quarto \textbf{Book} is a project type designed for long-form, multi-chapter documents.
+        \item Chapters are individual \icode{.qmd} files, ordered in \icode{\_quarto.yml} under a \icode{book:} key.
+        \item Key advantage over a plain website: \textbf{automatic chapter numbering} and \textbf{cross-references across chapters}.
+        \item Output formats: HTML (with sidebar navigation \& full-text search), PDF, EPUB, MS Word.
+        \item All rendered files are collected in a \icode{\_book/} directory.
+        \item Ideal for course scripts, lecture notes, and open textbooks — exactly the kind of material we create for CTM.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Setting up a Quarto Book}
+    \small
+    \begin{columns}[t]
+        \begin{column}{0.55\textwidth}
+            \textbf{Creating a new book project:}
+            \begin{itemize}
+                \item Terminal: \icode{quarto create project book}
+                \item VSCode: Command Palette $\rightarrow$ \textit{Quarto: Create Project} $\rightarrow$ \textit{Book Project}
+                \item Render with \icode{quarto render} or preview live with \icode{quarto preview}.
+            \end{itemize}
+            \vspace{0.3cm}
+            \textbf{Typical \icode{\_quarto.yml}:}
+            \begin{itemize}
+                \item Set \icode{project: type: book}
+                \item List chapters in order under \icode{book: chapters:}
+                \item \icode{index.qmd} serves as the book's landing page.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{block}{Example \icode{\_quarto.yml}}
+                \ttfamily\footnotesize
+                project:\\
+                \quad type: book\\[0.2em]
+                book:\\
+                \quad title: "CTM Script"\\
+                \quad author: "RUB CTM"\\
+                \quad chapters:\\
+                \quad\quad - index.qmd\\
+                \quad\quad - chapter1.qmd\\
+                \quad\quad - chapter2.qmd
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \section{Quarto Extensions}
 
 \begin{frame}{What are Quarto Extensions?}
