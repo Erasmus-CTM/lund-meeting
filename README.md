@@ -1,4 +1,4 @@
-# Lund Workshop RUB
+# Quarto Workshop RUB
 
 Hello everyone! 
 
