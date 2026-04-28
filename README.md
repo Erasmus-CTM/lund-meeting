@@ -1,4 +1,4 @@
-# Quarto Workshop RUB
+# Quarto Workshop Lund University
 
 Hello everyone! 
 
